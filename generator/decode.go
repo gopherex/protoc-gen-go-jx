@@ -12,6 +12,7 @@ func genDecode(g *protogen.GeneratedFile, m *protogen.Message, localPath protoge
 			continue
 		}
 		if f.Desc.IsMap() {
+			decodeMapCase(g, f, localPath)
 			continue
 		}
 		if f.Desc.IsList() {

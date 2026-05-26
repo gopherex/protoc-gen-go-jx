@@ -6,6 +6,7 @@ import (
 	fmt "fmt"
 	jx "github.com/go-faster/jx"
 	jxpb "github.com/gopherex/protoc-gen-go-jx/jxpb"
+	strconv "strconv"
 )
 
 func (m *ScalarTypes) Encode(e *jx.Encoder) {
@@ -1245,12 +1246,374 @@ func (m *MapKeyTypes) Encode(e *jx.Encoder) {
 		return
 	}
 	e.ObjStart()
+	if len(m.Int32Key) > 0 {
+		e.FieldStart("int32Key")
+		e.ObjStart()
+		for k, v := range m.Int32Key {
+			e.FieldStart(strconv.FormatInt(int64(k), 10))
+			e.Str(v)
+		}
+		e.ObjEnd()
+	}
+	if len(m.Int64Key) > 0 {
+		e.FieldStart("int64Key")
+		e.ObjStart()
+		for k, v := range m.Int64Key {
+			e.FieldStart(strconv.FormatInt(k, 10))
+			e.Str(v)
+		}
+		e.ObjEnd()
+	}
+	if len(m.Uint32Key) > 0 {
+		e.FieldStart("uint32Key")
+		e.ObjStart()
+		for k, v := range m.Uint32Key {
+			e.FieldStart(strconv.FormatInt(int64(k), 10))
+			e.Str(v)
+		}
+		e.ObjEnd()
+	}
+	if len(m.Uint64Key) > 0 {
+		e.FieldStart("uint64Key")
+		e.ObjStart()
+		for k, v := range m.Uint64Key {
+			e.FieldStart(strconv.FormatUint(k, 10))
+			e.Str(v)
+		}
+		e.ObjEnd()
+	}
+	if len(m.Sint32Key) > 0 {
+		e.FieldStart("sint32Key")
+		e.ObjStart()
+		for k, v := range m.Sint32Key {
+			e.FieldStart(strconv.FormatInt(int64(k), 10))
+			e.Str(v)
+		}
+		e.ObjEnd()
+	}
+	if len(m.Sint64Key) > 0 {
+		e.FieldStart("sint64Key")
+		e.ObjStart()
+		for k, v := range m.Sint64Key {
+			e.FieldStart(strconv.FormatInt(k, 10))
+			e.Str(v)
+		}
+		e.ObjEnd()
+	}
+	if len(m.Fixed32Key) > 0 {
+		e.FieldStart("fixed32Key")
+		e.ObjStart()
+		for k, v := range m.Fixed32Key {
+			e.FieldStart(strconv.FormatInt(int64(k), 10))
+			e.Str(v)
+		}
+		e.ObjEnd()
+	}
+	if len(m.Fixed64Key) > 0 {
+		e.FieldStart("fixed64Key")
+		e.ObjStart()
+		for k, v := range m.Fixed64Key {
+			e.FieldStart(strconv.FormatUint(k, 10))
+			e.Str(v)
+		}
+		e.ObjEnd()
+	}
+	if len(m.Sfixed32Key) > 0 {
+		e.FieldStart("sfixed32Key")
+		e.ObjStart()
+		for k, v := range m.Sfixed32Key {
+			e.FieldStart(strconv.FormatInt(int64(k), 10))
+			e.Str(v)
+		}
+		e.ObjEnd()
+	}
+	if len(m.Sfixed64Key) > 0 {
+		e.FieldStart("sfixed64Key")
+		e.ObjStart()
+		for k, v := range m.Sfixed64Key {
+			e.FieldStart(strconv.FormatInt(k, 10))
+			e.Str(v)
+		}
+		e.ObjEnd()
+	}
+	if len(m.BoolKey) > 0 {
+		e.FieldStart("boolKey")
+		e.ObjStart()
+		for k, v := range m.BoolKey {
+			e.FieldStart(strconv.FormatBool(k))
+			e.Str(v)
+		}
+		e.ObjEnd()
+	}
+	if len(m.StringKey) > 0 {
+		e.FieldStart("stringKey")
+		e.ObjStart()
+		for k, v := range m.StringKey {
+			e.FieldStart(k)
+			e.Str(v)
+		}
+		e.ObjEnd()
+	}
 	e.ObjEnd()
 }
 
 func (m *MapKeyTypes) Decode(d *jx.Decoder) error {
 	return d.Obj(func(d *jx.Decoder, key string) error {
 		switch key {
+		case "int32Key":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			if m.Int32Key == nil {
+				m.Int32Key = make(map[int32]string)
+			}
+			return d.Obj(func(d *jx.Decoder, ks string) error {
+				mk64, err := strconv.ParseInt(ks, 10, 32)
+				if err != nil {
+					return err
+				}
+				mk := int32(mk64)
+				var mv string
+				tv, err := d.Str()
+				if err != nil {
+					return err
+				}
+				mv = tv
+				m.Int32Key[mk] = mv
+				return nil
+			})
+		case "int64Key":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			if m.Int64Key == nil {
+				m.Int64Key = make(map[int64]string)
+			}
+			return d.Obj(func(d *jx.Decoder, ks string) error {
+				mk, err := strconv.ParseInt(ks, 10, 64)
+				if err != nil {
+					return err
+				}
+				var mv string
+				tv, err := d.Str()
+				if err != nil {
+					return err
+				}
+				mv = tv
+				m.Int64Key[mk] = mv
+				return nil
+			})
+		case "uint32Key":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			if m.Uint32Key == nil {
+				m.Uint32Key = make(map[uint32]string)
+			}
+			return d.Obj(func(d *jx.Decoder, ks string) error {
+				mk64, err := strconv.ParseUint(ks, 10, 32)
+				if err != nil {
+					return err
+				}
+				mk := uint32(mk64)
+				var mv string
+				tv, err := d.Str()
+				if err != nil {
+					return err
+				}
+				mv = tv
+				m.Uint32Key[mk] = mv
+				return nil
+			})
+		case "uint64Key":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			if m.Uint64Key == nil {
+				m.Uint64Key = make(map[uint64]string)
+			}
+			return d.Obj(func(d *jx.Decoder, ks string) error {
+				mk, err := strconv.ParseUint(ks, 10, 64)
+				if err != nil {
+					return err
+				}
+				var mv string
+				tv, err := d.Str()
+				if err != nil {
+					return err
+				}
+				mv = tv
+				m.Uint64Key[mk] = mv
+				return nil
+			})
+		case "sint32Key":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			if m.Sint32Key == nil {
+				m.Sint32Key = make(map[int32]string)
+			}
+			return d.Obj(func(d *jx.Decoder, ks string) error {
+				mk64, err := strconv.ParseInt(ks, 10, 32)
+				if err != nil {
+					return err
+				}
+				mk := int32(mk64)
+				var mv string
+				tv, err := d.Str()
+				if err != nil {
+					return err
+				}
+				mv = tv
+				m.Sint32Key[mk] = mv
+				return nil
+			})
+		case "sint64Key":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			if m.Sint64Key == nil {
+				m.Sint64Key = make(map[int64]string)
+			}
+			return d.Obj(func(d *jx.Decoder, ks string) error {
+				mk, err := strconv.ParseInt(ks, 10, 64)
+				if err != nil {
+					return err
+				}
+				var mv string
+				tv, err := d.Str()
+				if err != nil {
+					return err
+				}
+				mv = tv
+				m.Sint64Key[mk] = mv
+				return nil
+			})
+		case "fixed32Key":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			if m.Fixed32Key == nil {
+				m.Fixed32Key = make(map[uint32]string)
+			}
+			return d.Obj(func(d *jx.Decoder, ks string) error {
+				mk64, err := strconv.ParseUint(ks, 10, 32)
+				if err != nil {
+					return err
+				}
+				mk := uint32(mk64)
+				var mv string
+				tv, err := d.Str()
+				if err != nil {
+					return err
+				}
+				mv = tv
+				m.Fixed32Key[mk] = mv
+				return nil
+			})
+		case "fixed64Key":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			if m.Fixed64Key == nil {
+				m.Fixed64Key = make(map[uint64]string)
+			}
+			return d.Obj(func(d *jx.Decoder, ks string) error {
+				mk, err := strconv.ParseUint(ks, 10, 64)
+				if err != nil {
+					return err
+				}
+				var mv string
+				tv, err := d.Str()
+				if err != nil {
+					return err
+				}
+				mv = tv
+				m.Fixed64Key[mk] = mv
+				return nil
+			})
+		case "sfixed32Key":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			if m.Sfixed32Key == nil {
+				m.Sfixed32Key = make(map[int32]string)
+			}
+			return d.Obj(func(d *jx.Decoder, ks string) error {
+				mk64, err := strconv.ParseInt(ks, 10, 32)
+				if err != nil {
+					return err
+				}
+				mk := int32(mk64)
+				var mv string
+				tv, err := d.Str()
+				if err != nil {
+					return err
+				}
+				mv = tv
+				m.Sfixed32Key[mk] = mv
+				return nil
+			})
+		case "sfixed64Key":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			if m.Sfixed64Key == nil {
+				m.Sfixed64Key = make(map[int64]string)
+			}
+			return d.Obj(func(d *jx.Decoder, ks string) error {
+				mk, err := strconv.ParseInt(ks, 10, 64)
+				if err != nil {
+					return err
+				}
+				var mv string
+				tv, err := d.Str()
+				if err != nil {
+					return err
+				}
+				mv = tv
+				m.Sfixed64Key[mk] = mv
+				return nil
+			})
+		case "boolKey":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			if m.BoolKey == nil {
+				m.BoolKey = make(map[bool]string)
+			}
+			return d.Obj(func(d *jx.Decoder, ks string) error {
+				mk, err := strconv.ParseBool(ks)
+				if err != nil {
+					return err
+				}
+				var mv string
+				tv, err := d.Str()
+				if err != nil {
+					return err
+				}
+				mv = tv
+				m.BoolKey[mk] = mv
+				return nil
+			})
+		case "stringKey":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			if m.StringKey == nil {
+				m.StringKey = make(map[string]string)
+			}
+			return d.Obj(func(d *jx.Decoder, ks string) error {
+				mk := ks
+				var mv string
+				tv, err := d.Str()
+				if err != nil {
+					return err
+				}
+				mv = tv
+				m.StringKey[mk] = mv
+				return nil
+			})
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
@@ -1275,12 +1638,325 @@ func (m *MapValueTypes) Encode(e *jx.Encoder) {
 		return
 	}
 	e.ObjStart()
+	if len(m.DoubleValue) > 0 {
+		e.FieldStart("doubleValue")
+		e.ObjStart()
+		for k, v := range m.DoubleValue {
+			e.FieldStart(k)
+			jxpb.EncFloat64(e, v)
+		}
+		e.ObjEnd()
+	}
+	if len(m.FloatValue) > 0 {
+		e.FieldStart("floatValue")
+		e.ObjStart()
+		for k, v := range m.FloatValue {
+			e.FieldStart(k)
+			jxpb.EncFloat32(e, v)
+		}
+		e.ObjEnd()
+	}
+	if len(m.Int32Value) > 0 {
+		e.FieldStart("int32Value")
+		e.ObjStart()
+		for k, v := range m.Int32Value {
+			e.FieldStart(k)
+			e.Int32(v)
+		}
+		e.ObjEnd()
+	}
+	if len(m.Int64Value) > 0 {
+		e.FieldStart("int64Value")
+		e.ObjStart()
+		for k, v := range m.Int64Value {
+			e.FieldStart(k)
+			jxpb.EncInt64(e, v)
+		}
+		e.ObjEnd()
+	}
+	if len(m.Uint32Value) > 0 {
+		e.FieldStart("uint32Value")
+		e.ObjStart()
+		for k, v := range m.Uint32Value {
+			e.FieldStart(k)
+			e.UInt32(v)
+		}
+		e.ObjEnd()
+	}
+	if len(m.Uint64Value) > 0 {
+		e.FieldStart("uint64Value")
+		e.ObjStart()
+		for k, v := range m.Uint64Value {
+			e.FieldStart(k)
+			jxpb.EncUint64(e, v)
+		}
+		e.ObjEnd()
+	}
+	if len(m.BoolValue) > 0 {
+		e.FieldStart("boolValue")
+		e.ObjStart()
+		for k, v := range m.BoolValue {
+			e.FieldStart(k)
+			e.Bool(v)
+		}
+		e.ObjEnd()
+	}
+	if len(m.StringValue) > 0 {
+		e.FieldStart("stringValue")
+		e.ObjStart()
+		for k, v := range m.StringValue {
+			e.FieldStart(k)
+			e.Str(v)
+		}
+		e.ObjEnd()
+	}
+	if len(m.BytesValue) > 0 {
+		e.FieldStart("bytesValue")
+		e.ObjStart()
+		for k, v := range m.BytesValue {
+			e.FieldStart(k)
+			jxpb.EncBytes(e, v)
+		}
+		e.ObjEnd()
+	}
+	if len(m.EnumValue) > 0 {
+		e.FieldStart("enumValue")
+		e.ObjStart()
+		for k, v := range m.EnumValue {
+			e.FieldStart(k)
+			if s, ok := TopLevelEnum_name[int32(v)]; ok {
+				e.Str(s)
+			} else {
+				e.Int32(int32(v))
+			}
+		}
+		e.ObjEnd()
+	}
+	if len(m.MessageValue) > 0 {
+		e.FieldStart("messageValue")
+		e.ObjStart()
+		for k, v := range m.MessageValue {
+			e.FieldStart(k)
+			v.Encode(e)
+		}
+		e.ObjEnd()
+	}
 	e.ObjEnd()
 }
 
 func (m *MapValueTypes) Decode(d *jx.Decoder) error {
 	return d.Obj(func(d *jx.Decoder, key string) error {
 		switch key {
+		case "doubleValue":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			if m.DoubleValue == nil {
+				m.DoubleValue = make(map[string]float64)
+			}
+			return d.Obj(func(d *jx.Decoder, ks string) error {
+				mk := ks
+				var mv float64
+				tv, err := jxpb.DecFloat64(d)
+				if err != nil {
+					return err
+				}
+				mv = tv
+				m.DoubleValue[mk] = mv
+				return nil
+			})
+		case "floatValue":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			if m.FloatValue == nil {
+				m.FloatValue = make(map[string]float32)
+			}
+			return d.Obj(func(d *jx.Decoder, ks string) error {
+				mk := ks
+				var mv float32
+				tv, err := jxpb.DecFloat32(d)
+				if err != nil {
+					return err
+				}
+				mv = tv
+				m.FloatValue[mk] = mv
+				return nil
+			})
+		case "int32Value":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			if m.Int32Value == nil {
+				m.Int32Value = make(map[string]int32)
+			}
+			return d.Obj(func(d *jx.Decoder, ks string) error {
+				mk := ks
+				var mv int32
+				tv, err := jxpb.DecInt32(d)
+				if err != nil {
+					return err
+				}
+				mv = tv
+				m.Int32Value[mk] = mv
+				return nil
+			})
+		case "int64Value":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			if m.Int64Value == nil {
+				m.Int64Value = make(map[string]int64)
+			}
+			return d.Obj(func(d *jx.Decoder, ks string) error {
+				mk := ks
+				var mv int64
+				tv, err := jxpb.DecInt64(d)
+				if err != nil {
+					return err
+				}
+				mv = tv
+				m.Int64Value[mk] = mv
+				return nil
+			})
+		case "uint32Value":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			if m.Uint32Value == nil {
+				m.Uint32Value = make(map[string]uint32)
+			}
+			return d.Obj(func(d *jx.Decoder, ks string) error {
+				mk := ks
+				var mv uint32
+				tv, err := jxpb.DecUint32(d)
+				if err != nil {
+					return err
+				}
+				mv = tv
+				m.Uint32Value[mk] = mv
+				return nil
+			})
+		case "uint64Value":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			if m.Uint64Value == nil {
+				m.Uint64Value = make(map[string]uint64)
+			}
+			return d.Obj(func(d *jx.Decoder, ks string) error {
+				mk := ks
+				var mv uint64
+				tv, err := jxpb.DecUint64(d)
+				if err != nil {
+					return err
+				}
+				mv = tv
+				m.Uint64Value[mk] = mv
+				return nil
+			})
+		case "boolValue":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			if m.BoolValue == nil {
+				m.BoolValue = make(map[string]bool)
+			}
+			return d.Obj(func(d *jx.Decoder, ks string) error {
+				mk := ks
+				var mv bool
+				tv, err := d.Bool()
+				if err != nil {
+					return err
+				}
+				mv = tv
+				m.BoolValue[mk] = mv
+				return nil
+			})
+		case "stringValue":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			if m.StringValue == nil {
+				m.StringValue = make(map[string]string)
+			}
+			return d.Obj(func(d *jx.Decoder, ks string) error {
+				mk := ks
+				var mv string
+				tv, err := d.Str()
+				if err != nil {
+					return err
+				}
+				mv = tv
+				m.StringValue[mk] = mv
+				return nil
+			})
+		case "bytesValue":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			if m.BytesValue == nil {
+				m.BytesValue = make(map[string][]byte)
+			}
+			return d.Obj(func(d *jx.Decoder, ks string) error {
+				mk := ks
+				var mv []byte
+				tv, err := jxpb.DecBytes(d)
+				if err != nil {
+					return err
+				}
+				mv = tv
+				m.BytesValue[mk] = mv
+				return nil
+			})
+		case "enumValue":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			if m.EnumValue == nil {
+				m.EnumValue = make(map[string]TopLevelEnum)
+			}
+			return d.Obj(func(d *jx.Decoder, ks string) error {
+				mk := ks
+				var mv TopLevelEnum
+				switch d.Next() {
+				case jx.String:
+					s, err := d.Str()
+					if err != nil {
+						return err
+					}
+					n, ok := TopLevelEnum_value[s]
+					if !ok {
+						return fmt.Errorf("unknown enum value %q", s)
+					}
+					mv = TopLevelEnum(n)
+				default:
+					n, err := d.Int32()
+					if err != nil {
+						return err
+					}
+					mv = TopLevelEnum(n)
+				}
+				m.EnumValue[mk] = mv
+				return nil
+			})
+		case "messageValue":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			if m.MessageValue == nil {
+				m.MessageValue = make(map[string]*ScalarTypes)
+			}
+			return d.Obj(func(d *jx.Decoder, ks string) error {
+				mk := ks
+				var mv *ScalarTypes
+				mv = &ScalarTypes{}
+				if err := mv.Decode(d); err != nil {
+					return err
+				}
+				m.MessageValue[mk] = mv
+				return nil
+			})
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
@@ -1395,6 +2071,15 @@ func (m *TreeNode) Encode(e *jx.Encoder) {
 		}
 		e.ArrEnd()
 	}
+	if len(m.Named) > 0 {
+		e.FieldStart("named")
+		e.ObjStart()
+		for k, v := range m.Named {
+			e.FieldStart(k)
+			v.Encode(e)
+		}
+		e.ObjEnd()
+	}
 	e.ObjEnd()
 }
 
@@ -1427,6 +2112,23 @@ func (m *TreeNode) Decode(d *jx.Decoder) error {
 					return err
 				}
 				m.Children = append(m.Children, el)
+				return nil
+			})
+		case "named":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			if m.Named == nil {
+				m.Named = make(map[string]*TreeNode)
+			}
+			return d.Obj(func(d *jx.Decoder, ks string) error {
+				mk := ks
+				var mv *TreeNode
+				mv = &TreeNode{}
+				if err := mv.Decode(d); err != nil {
+					return err
+				}
+				m.Named[mk] = mv
 				return nil
 			})
 		default:

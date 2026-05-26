@@ -15,6 +15,7 @@ func genEncode(g *protogen.GeneratedFile, m *protogen.Message, localPath protoge
 			continue
 		}
 		if f.Desc.IsMap() {
+			encodeMap(g, f, localPath)
 			continue
 		}
 		if f.Desc.IsList() {
