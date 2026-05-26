@@ -20,6 +20,10 @@ generate:
       out: .
       opts:
         paths: source_relative
+    - path: ../bin/protoc-gen-go-jx
+      out: .
+      opts:
+        paths: source_relative
 breaking:
   ignore: []
   against_git_ref: master-worker
