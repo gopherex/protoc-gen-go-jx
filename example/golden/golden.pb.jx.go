@@ -5,6 +5,7 @@ package golden
 import (
 	fmt "fmt"
 	jx "github.com/go-faster/jx"
+	jxpb "github.com/gopherex/protoc-gen-go-jx/jxpb"
 )
 
 func (m *ScalarTypes) Encode(e *jx.Encoder) {
@@ -14,15 +15,226 @@ func (m *ScalarTypes) Encode(e *jx.Encoder) {
 		return
 	}
 	e.ObjStart()
+	if m.FieldDouble != 0 {
+		e.FieldStart("fieldDouble")
+		jxpb.EncFloat64(e, m.FieldDouble)
+	}
+	if m.FieldFloat != 0 {
+		e.FieldStart("fieldFloat")
+		jxpb.EncFloat32(e, m.FieldFloat)
+	}
+	if m.FieldInt32 != 0 {
+		e.FieldStart("fieldInt32")
+		e.Int32(m.FieldInt32)
+	}
+	if m.FieldInt64 != 0 {
+		e.FieldStart("fieldInt64")
+		jxpb.EncInt64(e, m.FieldInt64)
+	}
+	if m.FieldUint32 != 0 {
+		e.FieldStart("fieldUint32")
+		e.UInt32(m.FieldUint32)
+	}
+	if m.FieldUint64 != 0 {
+		e.FieldStart("fieldUint64")
+		jxpb.EncUint64(e, m.FieldUint64)
+	}
+	if m.FieldSint32 != 0 {
+		e.FieldStart("fieldSint32")
+		e.Int32(m.FieldSint32)
+	}
+	if m.FieldSint64 != 0 {
+		e.FieldStart("fieldSint64")
+		jxpb.EncInt64(e, m.FieldSint64)
+	}
+	if m.FieldFixed32 != 0 {
+		e.FieldStart("fieldFixed32")
+		e.UInt32(m.FieldFixed32)
+	}
+	if m.FieldFixed64 != 0 {
+		e.FieldStart("fieldFixed64")
+		jxpb.EncUint64(e, m.FieldFixed64)
+	}
+	if m.FieldSfixed32 != 0 {
+		e.FieldStart("fieldSfixed32")
+		e.Int32(m.FieldSfixed32)
+	}
+	if m.FieldSfixed64 != 0 {
+		e.FieldStart("fieldSfixed64")
+		jxpb.EncInt64(e, m.FieldSfixed64)
+	}
+	if m.FieldBool != false {
+		e.FieldStart("fieldBool")
+		e.Bool(m.FieldBool)
+	}
+	if m.FieldString != "" {
+		e.FieldStart("fieldString")
+		e.Str(m.FieldString)
+	}
+	if len(m.FieldBytes) > 0 {
+		e.FieldStart("fieldBytes")
+		jxpb.EncBytes(e, m.FieldBytes)
+	}
 	e.ObjEnd()
 }
 
 func (m *ScalarTypes) Decode(d *jx.Decoder) error {
 	return d.Obj(func(d *jx.Decoder, key string) error {
 		switch key {
+		case "fieldDouble":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			v, err := jxpb.DecFloat64(d)
+			if err != nil {
+				return err
+			}
+			m.FieldDouble = v
+			return nil
+		case "fieldFloat":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			v, err := jxpb.DecFloat32(d)
+			if err != nil {
+				return err
+			}
+			m.FieldFloat = v
+			return nil
+		case "fieldInt32":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			v, err := jxpb.DecInt32(d)
+			if err != nil {
+				return err
+			}
+			m.FieldInt32 = v
+			return nil
+		case "fieldInt64":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			v, err := jxpb.DecInt64(d)
+			if err != nil {
+				return err
+			}
+			m.FieldInt64 = v
+			return nil
+		case "fieldUint32":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			v, err := jxpb.DecUint32(d)
+			if err != nil {
+				return err
+			}
+			m.FieldUint32 = v
+			return nil
+		case "fieldUint64":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			v, err := jxpb.DecUint64(d)
+			if err != nil {
+				return err
+			}
+			m.FieldUint64 = v
+			return nil
+		case "fieldSint32":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			v, err := jxpb.DecInt32(d)
+			if err != nil {
+				return err
+			}
+			m.FieldSint32 = v
+			return nil
+		case "fieldSint64":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			v, err := jxpb.DecInt64(d)
+			if err != nil {
+				return err
+			}
+			m.FieldSint64 = v
+			return nil
+		case "fieldFixed32":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			v, err := jxpb.DecUint32(d)
+			if err != nil {
+				return err
+			}
+			m.FieldFixed32 = v
+			return nil
+		case "fieldFixed64":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			v, err := jxpb.DecUint64(d)
+			if err != nil {
+				return err
+			}
+			m.FieldFixed64 = v
+			return nil
+		case "fieldSfixed32":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			v, err := jxpb.DecInt32(d)
+			if err != nil {
+				return err
+			}
+			m.FieldSfixed32 = v
+			return nil
+		case "fieldSfixed64":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			v, err := jxpb.DecInt64(d)
+			if err != nil {
+				return err
+			}
+			m.FieldSfixed64 = v
+			return nil
+		case "fieldBool":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			v, err := d.Bool()
+			if err != nil {
+				return err
+			}
+			m.FieldBool = v
+			return nil
+		case "fieldString":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			v, err := d.Str()
+			if err != nil {
+				return err
+			}
+			m.FieldString = v
+			return nil
+		case "fieldBytes":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			v, err := jxpb.DecBytes(d)
+			if err != nil {
+				return err
+			}
+			m.FieldBytes = v
+			return nil
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
+		return nil
 	})
 }
 
@@ -44,15 +256,226 @@ func (m *OptionalScalarTypes) Encode(e *jx.Encoder) {
 		return
 	}
 	e.ObjStart()
+	if m.FieldDouble != nil {
+		e.FieldStart("fieldDouble")
+		jxpb.EncFloat64(e, *m.FieldDouble)
+	}
+	if m.FieldFloat != nil {
+		e.FieldStart("fieldFloat")
+		jxpb.EncFloat32(e, *m.FieldFloat)
+	}
+	if m.FieldInt32 != nil {
+		e.FieldStart("fieldInt32")
+		e.Int32(*m.FieldInt32)
+	}
+	if m.FieldInt64 != nil {
+		e.FieldStart("fieldInt64")
+		jxpb.EncInt64(e, *m.FieldInt64)
+	}
+	if m.FieldUint32 != nil {
+		e.FieldStart("fieldUint32")
+		e.UInt32(*m.FieldUint32)
+	}
+	if m.FieldUint64 != nil {
+		e.FieldStart("fieldUint64")
+		jxpb.EncUint64(e, *m.FieldUint64)
+	}
+	if m.FieldSint32 != nil {
+		e.FieldStart("fieldSint32")
+		e.Int32(*m.FieldSint32)
+	}
+	if m.FieldSint64 != nil {
+		e.FieldStart("fieldSint64")
+		jxpb.EncInt64(e, *m.FieldSint64)
+	}
+	if m.FieldFixed32 != nil {
+		e.FieldStart("fieldFixed32")
+		e.UInt32(*m.FieldFixed32)
+	}
+	if m.FieldFixed64 != nil {
+		e.FieldStart("fieldFixed64")
+		jxpb.EncUint64(e, *m.FieldFixed64)
+	}
+	if m.FieldSfixed32 != nil {
+		e.FieldStart("fieldSfixed32")
+		e.Int32(*m.FieldSfixed32)
+	}
+	if m.FieldSfixed64 != nil {
+		e.FieldStart("fieldSfixed64")
+		jxpb.EncInt64(e, *m.FieldSfixed64)
+	}
+	if m.FieldBool != nil {
+		e.FieldStart("fieldBool")
+		e.Bool(*m.FieldBool)
+	}
+	if m.FieldString != nil {
+		e.FieldStart("fieldString")
+		e.Str(*m.FieldString)
+	}
+	if len(m.FieldBytes) > 0 {
+		e.FieldStart("fieldBytes")
+		jxpb.EncBytes(e, m.FieldBytes)
+	}
 	e.ObjEnd()
 }
 
 func (m *OptionalScalarTypes) Decode(d *jx.Decoder) error {
 	return d.Obj(func(d *jx.Decoder, key string) error {
 		switch key {
+		case "fieldDouble":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			v, err := jxpb.DecFloat64(d)
+			if err != nil {
+				return err
+			}
+			m.FieldDouble = &v
+			return nil
+		case "fieldFloat":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			v, err := jxpb.DecFloat32(d)
+			if err != nil {
+				return err
+			}
+			m.FieldFloat = &v
+			return nil
+		case "fieldInt32":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			v, err := jxpb.DecInt32(d)
+			if err != nil {
+				return err
+			}
+			m.FieldInt32 = &v
+			return nil
+		case "fieldInt64":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			v, err := jxpb.DecInt64(d)
+			if err != nil {
+				return err
+			}
+			m.FieldInt64 = &v
+			return nil
+		case "fieldUint32":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			v, err := jxpb.DecUint32(d)
+			if err != nil {
+				return err
+			}
+			m.FieldUint32 = &v
+			return nil
+		case "fieldUint64":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			v, err := jxpb.DecUint64(d)
+			if err != nil {
+				return err
+			}
+			m.FieldUint64 = &v
+			return nil
+		case "fieldSint32":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			v, err := jxpb.DecInt32(d)
+			if err != nil {
+				return err
+			}
+			m.FieldSint32 = &v
+			return nil
+		case "fieldSint64":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			v, err := jxpb.DecInt64(d)
+			if err != nil {
+				return err
+			}
+			m.FieldSint64 = &v
+			return nil
+		case "fieldFixed32":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			v, err := jxpb.DecUint32(d)
+			if err != nil {
+				return err
+			}
+			m.FieldFixed32 = &v
+			return nil
+		case "fieldFixed64":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			v, err := jxpb.DecUint64(d)
+			if err != nil {
+				return err
+			}
+			m.FieldFixed64 = &v
+			return nil
+		case "fieldSfixed32":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			v, err := jxpb.DecInt32(d)
+			if err != nil {
+				return err
+			}
+			m.FieldSfixed32 = &v
+			return nil
+		case "fieldSfixed64":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			v, err := jxpb.DecInt64(d)
+			if err != nil {
+				return err
+			}
+			m.FieldSfixed64 = &v
+			return nil
+		case "fieldBool":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			v, err := d.Bool()
+			if err != nil {
+				return err
+			}
+			m.FieldBool = &v
+			return nil
+		case "fieldString":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			v, err := d.Str()
+			if err != nil {
+				return err
+			}
+			m.FieldString = &v
+			return nil
+		case "fieldBytes":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			v, err := jxpb.DecBytes(d)
+			if err != nil {
+				return err
+			}
+			m.FieldBytes = v
+			return nil
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
+		return nil
 	})
 }
 
@@ -83,6 +506,7 @@ func (m *RepeatedScalarTypes) Decode(d *jx.Decoder) error {
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
+		return nil
 	})
 }
 
@@ -113,6 +537,7 @@ func (m *Outer) Decode(d *jx.Decoder) error {
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
+		return nil
 	})
 }
 
@@ -143,6 +568,7 @@ func (m *Outer_Inner) Decode(d *jx.Decoder) error {
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
+		return nil
 	})
 }
 
@@ -164,15 +590,30 @@ func (m *Outer_Inner_DeepInner) Encode(e *jx.Encoder) {
 		return
 	}
 	e.ObjStart()
+	if m.Value != "" {
+		e.FieldStart("value")
+		e.Str(m.Value)
+	}
 	e.ObjEnd()
 }
 
 func (m *Outer_Inner_DeepInner) Decode(d *jx.Decoder) error {
 	return d.Obj(func(d *jx.Decoder, key string) error {
 		switch key {
+		case "value":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			v, err := d.Str()
+			if err != nil {
+				return err
+			}
+			m.Value = v
+			return nil
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
+		return nil
 	})
 }
 
@@ -203,6 +644,7 @@ func (m *EnumAndMessageFields) Decode(d *jx.Decoder) error {
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
+		return nil
 	})
 }
 
@@ -233,6 +675,7 @@ func (m *MapKeyTypes) Decode(d *jx.Decoder) error {
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
+		return nil
 	})
 }
 
@@ -263,6 +706,7 @@ func (m *MapValueTypes) Decode(d *jx.Decoder) error {
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
+		return nil
 	})
 }
 
@@ -284,15 +728,30 @@ func (m *OneofContainer) Encode(e *jx.Encoder) {
 		return
 	}
 	e.ObjStart()
+	if m.OutsideOneof != "" {
+		e.FieldStart("outsideOneof")
+		e.Str(m.OutsideOneof)
+	}
 	e.ObjEnd()
 }
 
 func (m *OneofContainer) Decode(d *jx.Decoder) error {
 	return d.Obj(func(d *jx.Decoder, key string) error {
 		switch key {
+		case "outsideOneof":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			v, err := d.Str()
+			if err != nil {
+				return err
+			}
+			m.OutsideOneof = v
+			return nil
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
+		return nil
 	})
 }
 
@@ -323,6 +782,7 @@ func (m *WellKnownTypes) Decode(d *jx.Decoder) error {
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
+		return nil
 	})
 }
 
@@ -344,15 +804,30 @@ func (m *TreeNode) Encode(e *jx.Encoder) {
 		return
 	}
 	e.ObjStart()
+	if m.Id != "" {
+		e.FieldStart("id")
+		e.Str(m.Id)
+	}
 	e.ObjEnd()
 }
 
 func (m *TreeNode) Decode(d *jx.Decoder) error {
 	return d.Obj(func(d *jx.Decoder, key string) error {
 		switch key {
+		case "id":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			v, err := d.Str()
+			if err != nil {
+				return err
+			}
+			m.Id = v
+			return nil
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
+		return nil
 	})
 }
 
@@ -383,6 +858,7 @@ func (m *MutualA) Decode(d *jx.Decoder) error {
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
+		return nil
 	})
 }
 
@@ -413,6 +889,7 @@ func (m *MutualB) Decode(d *jx.Decoder) error {
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
+		return nil
 	})
 }
 
@@ -434,15 +911,30 @@ func (m *Reserved) Encode(e *jx.Encoder) {
 		return
 	}
 	e.ObjStart()
+	if m.Active != "" {
+		e.FieldStart("active")
+		e.Str(m.Active)
+	}
 	e.ObjEnd()
 }
 
 func (m *Reserved) Decode(d *jx.Decoder) error {
 	return d.Obj(func(d *jx.Decoder, key string) error {
 		switch key {
+		case "active":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			v, err := d.Str()
+			if err != nil {
+				return err
+			}
+			m.Active = v
+			return nil
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
+		return nil
 	})
 }
 
@@ -473,6 +965,7 @@ func (m *Everything) Decode(d *jx.Decoder) error {
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
+		return nil
 	})
 }
 
