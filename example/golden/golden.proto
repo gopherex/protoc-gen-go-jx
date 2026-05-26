@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package golden;
 
-option go_package = "github.com/gopherex/protoc-gen-jx/example/golden";
+option go_package = "github.com/gopherex/protoc-gen-go-jx/example/golden";
 
 import "google/protobuf/any.proto";
 import "google/protobuf/duration.proto";
