@@ -234,7 +234,6 @@ func (m *ScalarTypes) Decode(d *jx.Decoder) error {
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
-		return nil
 	})
 }
 
@@ -475,7 +474,6 @@ func (m *OptionalScalarTypes) Decode(d *jx.Decoder) error {
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
-		return nil
 	})
 }
 
@@ -506,7 +504,6 @@ func (m *RepeatedScalarTypes) Decode(d *jx.Decoder) error {
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
-		return nil
 	})
 }
 
@@ -537,7 +534,6 @@ func (m *Outer) Decode(d *jx.Decoder) error {
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
-		return nil
 	})
 }
 
@@ -568,7 +564,6 @@ func (m *Outer_Inner) Decode(d *jx.Decoder) error {
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
-		return nil
 	})
 }
 
@@ -613,7 +608,6 @@ func (m *Outer_Inner_DeepInner) Decode(d *jx.Decoder) error {
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
-		return nil
 	})
 }
 
@@ -644,7 +638,6 @@ func (m *EnumAndMessageFields) Decode(d *jx.Decoder) error {
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
-		return nil
 	})
 }
 
@@ -675,7 +668,6 @@ func (m *MapKeyTypes) Decode(d *jx.Decoder) error {
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
-		return nil
 	})
 }
 
@@ -706,7 +698,6 @@ func (m *MapValueTypes) Decode(d *jx.Decoder) error {
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
-		return nil
 	})
 }
 
@@ -751,7 +742,6 @@ func (m *OneofContainer) Decode(d *jx.Decoder) error {
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
-		return nil
 	})
 }
 
@@ -782,7 +772,6 @@ func (m *WellKnownTypes) Decode(d *jx.Decoder) error {
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
-		return nil
 	})
 }
 
@@ -827,7 +816,6 @@ func (m *TreeNode) Decode(d *jx.Decoder) error {
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
-		return nil
 	})
 }
 
@@ -858,7 +846,6 @@ func (m *MutualA) Decode(d *jx.Decoder) error {
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
-		return nil
 	})
 }
 
@@ -889,7 +876,6 @@ func (m *MutualB) Decode(d *jx.Decoder) error {
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
-		return nil
 	})
 }
 
@@ -934,7 +920,6 @@ func (m *Reserved) Decode(d *jx.Decoder) error {
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
-		return nil
 	})
 }
 
@@ -965,7 +950,6 @@ func (m *Everything) Decode(d *jx.Decoder) error {
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
-		return nil
 	})
 }
 

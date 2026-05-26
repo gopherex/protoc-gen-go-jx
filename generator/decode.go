@@ -19,7 +19,6 @@ func genDecode(g *protogen.GeneratedFile, m *protogen.Message) {
 	g.P("default:")
 	g.P("return ", errorf(g), `("unknown field %q", key)`)
 	g.P("}")
-	g.P("return nil")
 	g.P("})")
 	g.P("}")
 	g.P()
