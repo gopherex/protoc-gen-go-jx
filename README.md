@@ -30,9 +30,12 @@ Generated JSON matches protojson defaults:
 - **all** well-known types: Timestamp, Duration, the 9 wrappers, Empty, Struct,
   Value, ListValue, FieldMask, and Any.
 
-Decoding is strict: an unknown JSON field is an error. It also accepts the
-lenient inputs protojson accepts (enum as name or number, 64-bit ints as string
-or number, std or URL-safe base64).
+Decoding matches protojson defaults: unknown JSON field, duplicate field key,
+and multiple keys for the same `oneof` are all errors. It accepts both the
+lowerCamel JSON name and the original proto field name, and the lenient scalar
+inputs protojson accepts (enum as name or number, 64-bit ints as string or
+number, std or URL-safe base64). Cross-package message fields are supported when
+their package is also jx-generated.
 
 `Encode` is infallible by contract; `Any` resolution failures degrade to a
 best-effort `{"@type": …}` rather than panicking.

@@ -187,23 +187,19 @@ maps (all key types), oneof, nested, recursion, reserved, and every WKT.
 - proto2 semantics, extensions, groups, MessageSet.
 - Multiline/indented output, deterministic map ordering.
 
-### Known decode-leniency gaps vs protojson (v1)
+### Parity gaps closed after initial review
 
-The encode side is byte-parity with protojson defaults (verified by the
-differential suite). These input-side behaviours differ from protojson and are
-deferred — they do not affect encoding, nor round-tripping our own/standard
-camelCase output:
+The following were initially v1 limitations and have since been fixed (each with
+a dedicated test):
 
-- **Original (snake_case) field names are rejected on decode.** protojson
-  accepts both the lowerCamel JSON name and the original proto name; we only
-  accept the JSON name (unknown key → error). Fix would emit a second `case`
-  per field.
-- **Duplicate JSON keys** are last-wins; protojson errors.
-- **Two members of the same oneof set in one object** silently overwrite;
-  protojson errors.
-- **Cross-package, non-WKT message fields are silently omitted** (the
-  `localPath` guard). No such field exists in `golden.proto`; supporting them
-  would require detecting whether the other package's type has generated
-  `Encode`/`Decode` methods.
-- **Negative zero** (`-0.0`) is omitted on encode (treated as default `0`);
-  protojson emits `-0`. Round-trips correctly under `proto.Equal`.
+- **Original (snake_case) field names accepted on decode** — each case emits both
+  the lowerCamel and proto name (`caseLabels`).
+- **Duplicate field keys rejected** — per-`Decode` `seen` set; a repeated field
+  (incl. via a camel/snake alias) errors.
+- **Multiple keys for one oneof rejected** — per-oneof entry in the `seen` set.
+- **Cross-package non-WKT message fields supported** — emit `.Encode`/`.Decode`
+  assuming the dependency was also jx-generated (loud compile error otherwise);
+  the `localPath`/`msgSupported` guard was removed.
+- **Negative zero emitted** — float/double emit when `v != 0 || math.Signbit(v)`.
+
+Remaining unknown JSON keys are still rejected (protojson default).
