@@ -24,9 +24,26 @@ func genEncode(g *protogen.GeneratedFile, m *protogen.Message, localPath protoge
 		}
 		encodeSingular(g, f, localPath)
 	}
+	for _, oo := range m.Oneofs {
+		if oo.Desc.IsSynthetic() {
+			continue
+		}
+		encodeOneof(g, oo)
+	}
 	g.P("e.ObjEnd()")
 	g.P("}")
 	g.P()
+}
+
+// encodeOneof emits a type switch that writes the set member's JSON field.
+func encodeOneof(g *protogen.GeneratedFile, oo *protogen.Oneof) {
+	g.P("switch v := m.", oo.GoName, ".(type) {")
+	for _, f := range oo.Fields {
+		g.P("case *", f.GoIdent, ":")
+		g.P("e.FieldStart(", strconvQuote(f.Desc.JSONName()), ")")
+		emitEncElem(g, f, "v."+f.GoName)
+	}
+	g.P("}")
 }
 
 // isPointerField reports whether the Go struct field is a pointer.

@@ -21,6 +21,14 @@ func genDecode(g *protogen.GeneratedFile, m *protogen.Message, localPath protoge
 		}
 		decodeSingularCase(g, f, localPath)
 	}
+	for _, oo := range m.Oneofs {
+		if oo.Desc.IsSynthetic() {
+			continue
+		}
+		for _, f := range oo.Fields {
+			decodeOneofCase(g, oo, f)
+		}
+	}
 	g.P("default:")
 	g.P("return ", errorf(g), `("unknown field %q", key)`)
 	g.P("}")
@@ -177,6 +185,31 @@ func assignEnum(g *protogen.GeneratedFile, enumGo protogen.GoIdent, target, nExp
 		g.P(target, " = &v")
 	} else {
 		g.P(target, " = ", enumGo, "(", nExpr, ")")
+	}
+}
+
+// decodeOneofCase reads one oneof member and assigns the wrapper struct.
+func decodeOneofCase(g *protogen.GeneratedFile, oo *protogen.Oneof, f *protogen.Field) {
+	g.P("case ", strconvQuote(f.Desc.JSONName()), ":")
+	g.P("if d.Next() == ", g.QualifiedGoIdent(jxPkg.Ident("Null")), " { return d.Null() }")
+	switch classify(f.Desc) {
+	case kindMessage:
+		g.P("w := &", f.GoIdent, "{}")
+		g.P("w.", f.GoName, " = &", f.Message.GoIdent, "{}")
+		g.P("if err := w.", f.GoName, ".Decode(d); err != nil { return err }")
+		g.P("m.", oo.GoName, " = w")
+		g.P("return nil")
+	case kindEnum:
+		g.P("w := &", f.GoIdent, "{}")
+		emitDecEnumValueInto(g, f, "w."+f.GoName)
+		g.P("m.", oo.GoName, " = w")
+		g.P("return nil")
+	default:
+		dec, _ := decScalarExpr(g, f)
+		g.P("val, err := ", dec)
+		g.P("if err != nil { return err }")
+		g.P("m.", oo.GoName, " = &", f.GoIdent, "{", f.GoName, ": val}")
+		g.P("return nil")
 	}
 }
 

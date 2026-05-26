@@ -1985,6 +1985,41 @@ func (m *OneofContainer) Encode(e *jx.Encoder) {
 		e.FieldStart("outsideOneof")
 		e.Str(m.OutsideOneof)
 	}
+	switch v := m.Choice.(type) {
+	case *OneofContainer_ChoiceDouble:
+		e.FieldStart("choiceDouble")
+		jxpb.EncFloat64(e, v.ChoiceDouble)
+	case *OneofContainer_ChoiceInt32:
+		e.FieldStart("choiceInt32")
+		e.Int32(v.ChoiceInt32)
+	case *OneofContainer_ChoiceBool:
+		e.FieldStart("choiceBool")
+		e.Bool(v.ChoiceBool)
+	case *OneofContainer_ChoiceString:
+		e.FieldStart("choiceString")
+		e.Str(v.ChoiceString)
+	case *OneofContainer_ChoiceBytes:
+		e.FieldStart("choiceBytes")
+		jxpb.EncBytes(e, v.ChoiceBytes)
+	case *OneofContainer_ChoiceEnum:
+		e.FieldStart("choiceEnum")
+		if s, ok := TopLevelEnum_name[int32(v.ChoiceEnum)]; ok {
+			e.Str(s)
+		} else {
+			e.Int32(int32(v.ChoiceEnum))
+		}
+	case *OneofContainer_ChoiceMessage:
+		e.FieldStart("choiceMessage")
+		v.ChoiceMessage.Encode(e)
+	}
+	switch v := m.Other.(type) {
+	case *OneofContainer_OtherA:
+		e.FieldStart("otherA")
+		e.Str(v.OtherA)
+	case *OneofContainer_OtherB:
+		e.FieldStart("otherB")
+		jxpb.EncInt64(e, v.OtherB)
+	}
 	e.ObjEnd()
 }
 
@@ -2000,6 +2035,112 @@ func (m *OneofContainer) Decode(d *jx.Decoder) error {
 				return err
 			}
 			m.OutsideOneof = v
+			return nil
+		case "choiceDouble":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			val, err := jxpb.DecFloat64(d)
+			if err != nil {
+				return err
+			}
+			m.Choice = &OneofContainer_ChoiceDouble{ChoiceDouble: val}
+			return nil
+		case "choiceInt32":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			val, err := jxpb.DecInt32(d)
+			if err != nil {
+				return err
+			}
+			m.Choice = &OneofContainer_ChoiceInt32{ChoiceInt32: val}
+			return nil
+		case "choiceBool":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			val, err := d.Bool()
+			if err != nil {
+				return err
+			}
+			m.Choice = &OneofContainer_ChoiceBool{ChoiceBool: val}
+			return nil
+		case "choiceString":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			val, err := d.Str()
+			if err != nil {
+				return err
+			}
+			m.Choice = &OneofContainer_ChoiceString{ChoiceString: val}
+			return nil
+		case "choiceBytes":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			val, err := jxpb.DecBytes(d)
+			if err != nil {
+				return err
+			}
+			m.Choice = &OneofContainer_ChoiceBytes{ChoiceBytes: val}
+			return nil
+		case "choiceEnum":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			w := &OneofContainer_ChoiceEnum{}
+			switch d.Next() {
+			case jx.String:
+				s, err := d.Str()
+				if err != nil {
+					return err
+				}
+				n, ok := TopLevelEnum_value[s]
+				if !ok {
+					return fmt.Errorf("unknown enum value %q", s)
+				}
+				w.ChoiceEnum = TopLevelEnum(n)
+			default:
+				n, err := d.Int32()
+				if err != nil {
+					return err
+				}
+				w.ChoiceEnum = TopLevelEnum(n)
+			}
+			m.Choice = w
+			return nil
+		case "choiceMessage":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			w := &OneofContainer_ChoiceMessage{}
+			w.ChoiceMessage = &ScalarTypes{}
+			if err := w.ChoiceMessage.Decode(d); err != nil {
+				return err
+			}
+			m.Choice = w
+			return nil
+		case "otherA":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			val, err := d.Str()
+			if err != nil {
+				return err
+			}
+			m.Other = &OneofContainer_OtherA{OtherA: val}
+			return nil
+		case "otherB":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			val, err := jxpb.DecInt64(d)
+			if err != nil {
+				return err
+			}
+			m.Other = &OneofContainer_OtherB{OtherB: val}
 			return nil
 		default:
 			return fmt.Errorf("unknown field %q", key)
@@ -2327,6 +2468,14 @@ func (m *Everything) Encode(e *jx.Encoder) {
 		}
 		e.ArrEnd()
 	}
+	switch v := m.Terminal.(type) {
+	case *Everything_Done:
+		e.FieldStart("done")
+		e.Bool(v.Done)
+	case *Everything_Error:
+		e.FieldStart("error")
+		e.Str(v.Error)
+	}
 	e.ObjEnd()
 }
 
@@ -2405,6 +2554,26 @@ func (m *Everything) Decode(d *jx.Decoder) error {
 				m.Recursive = append(m.Recursive, el)
 				return nil
 			})
+		case "done":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			val, err := d.Bool()
+			if err != nil {
+				return err
+			}
+			m.Terminal = &Everything_Done{Done: val}
+			return nil
+		case "error":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			val, err := d.Str()
+			if err != nil {
+				return err
+			}
+			m.Terminal = &Everything_Error{Error: val}
+			return nil
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
