@@ -9,8 +9,8 @@ import (
 // are always rendered as JSON strings.
 func encodeMap(g *protogen.GeneratedFile, f *protogen.Field, localPath protogen.GoImportPath) {
 	val := f.Message.Fields[1]
-	if classify(val.Desc) == kindMessage && val.Message.GoIdent.GoImportPath != localPath {
-		return // external message value (WKT); handled in a later task
+	if classify(val.Desc) == kindMessage && !msgSupported(val, localPath) {
+		return
 	}
 	get := "m." + f.GoName
 	g.P("if len(", get, ") > 0 {")
@@ -46,8 +46,8 @@ func mapKeyToString(g *protogen.GeneratedFile, fd protoreflect.FieldDescriptor, 
 // decodeMapCase reads a JSON object into a map field.
 func decodeMapCase(g *protogen.GeneratedFile, f *protogen.Field, localPath protogen.GoImportPath) {
 	val := f.Message.Fields[1]
-	if classify(val.Desc) == kindMessage && val.Message.GoIdent.GoImportPath != localPath {
-		return // external message value (WKT); handled in a later task
+	if classify(val.Desc) == kindMessage && !msgSupported(val, localPath) {
+		return
 	}
 	jxDec := g.QualifiedGoIdent(jxPkg.Ident("Decoder"))
 	g.P("case ", strconvQuote(f.Desc.JSONName()), ":")
@@ -149,7 +149,7 @@ func emitDecElemInto(g *protogen.GeneratedFile, f *protogen.Field, target string
 	switch classify(f.Desc) {
 	case kindMessage:
 		g.P(target, " = &", f.Message.GoIdent, "{}")
-		g.P("if err := ", target, ".Decode(d); err != nil { return err }")
+		emitDecMsgValue(g, f, target)
 	case kindEnum:
 		emitDecEnumValueInto(g, f, target)
 	default:

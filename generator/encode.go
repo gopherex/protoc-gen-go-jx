@@ -114,14 +114,12 @@ func encodeSingular(g *protogen.GeneratedFile, f *protogen.Field, localPath prot
 			g.P("}")
 		}
 	case kindMessage:
-		// message field is always a pointer; emit when non-nil.
-		// Skip external messages (WKTs, etc.) that have no generated Encode.
-		if f.Message.GoIdent.GoImportPath != localPath {
+		if !msgSupported(f, localPath) {
 			break
 		}
 		g.P("if ", get, " != nil {")
 		g.P("e.FieldStart(", strconvQuote(name), ")")
-		g.P(get, ".Encode(e)")
+		emitEncMsgValue(g, f, get)
 		g.P("}")
 	default:
 		// kindOther: emit nothing
@@ -146,8 +144,7 @@ func encodeList(g *protogen.GeneratedFile, f *protogen.Field, localPath protogen
 	if k == kindOther {
 		return
 	}
-	// Skip external message types (WKTs, etc.) that have no generated Encode.
-	if k == kindMessage && f.Message.GoIdent.GoImportPath != localPath {
+	if k == kindMessage && !msgSupported(f, localPath) {
 		return
 	}
 	get := "m." + f.GoName
@@ -186,7 +183,7 @@ func emitEncElem(g *protogen.GeneratedFile, f *protogen.Field, v string) {
 	case kindEnum:
 		emitEncEnum(g, f, v)
 	case kindMessage:
-		g.P(v, ".Encode(e)")
+		emitEncMsgValue(g, f, v)
 	}
 }
 

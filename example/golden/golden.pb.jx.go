@@ -6,6 +6,11 @@ import (
 	fmt "fmt"
 	jx "github.com/go-faster/jx"
 	jxpb "github.com/gopherex/protoc-gen-go-jx/jxpb"
+	durationpb "google.golang.org/protobuf/types/known/durationpb"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
+	fieldmaskpb "google.golang.org/protobuf/types/known/fieldmaskpb"
+	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
+	wrapperspb "google.golang.org/protobuf/types/known/wrapperspb"
 	strconv "strconv"
 )
 
@@ -2166,12 +2171,188 @@ func (m *WellKnownTypes) Encode(e *jx.Encoder) {
 		return
 	}
 	e.ObjStart()
+	if m.Timestamp != nil {
+		e.FieldStart("timestamp")
+		jxpb.EncTimestamp(e, m.Timestamp)
+	}
+	if m.Duration != nil {
+		e.FieldStart("duration")
+		jxpb.EncDuration(e, m.Duration)
+	}
+	if m.Empty != nil {
+		e.FieldStart("empty")
+		jxpb.EncEmpty(e, m.Empty)
+	}
+	if m.FieldMask != nil {
+		e.FieldStart("fieldMask")
+		jxpb.EncFieldMask(e, m.FieldMask)
+	}
+	if m.DoubleWrapper != nil {
+		e.FieldStart("doubleWrapper")
+		jxpb.EncDoubleValue(e, m.DoubleWrapper)
+	}
+	if m.FloatWrapper != nil {
+		e.FieldStart("floatWrapper")
+		jxpb.EncFloatValue(e, m.FloatWrapper)
+	}
+	if m.Int32Wrapper != nil {
+		e.FieldStart("int32Wrapper")
+		jxpb.EncInt32Value(e, m.Int32Wrapper)
+	}
+	if m.Int64Wrapper != nil {
+		e.FieldStart("int64Wrapper")
+		jxpb.EncInt64Value(e, m.Int64Wrapper)
+	}
+	if m.Uint32Wrapper != nil {
+		e.FieldStart("uint32Wrapper")
+		jxpb.EncUint32Value(e, m.Uint32Wrapper)
+	}
+	if m.Uint64Wrapper != nil {
+		e.FieldStart("uint64Wrapper")
+		jxpb.EncUint64Value(e, m.Uint64Wrapper)
+	}
+	if m.BoolWrapper != nil {
+		e.FieldStart("boolWrapper")
+		jxpb.EncBoolValue(e, m.BoolWrapper)
+	}
+	if m.StringWrapper != nil {
+		e.FieldStart("stringWrapper")
+		jxpb.EncStringValue(e, m.StringWrapper)
+	}
+	if m.BytesWrapper != nil {
+		e.FieldStart("bytesWrapper")
+		jxpb.EncBytesValue(e, m.BytesWrapper)
+	}
+	if len(m.RepeatedTimestamp) > 0 {
+		e.FieldStart("repeatedTimestamp")
+		e.ArrStart()
+		for _, v := range m.RepeatedTimestamp {
+			jxpb.EncTimestamp(e, v)
+		}
+		e.ArrEnd()
+	}
+	if len(m.MapDuration) > 0 {
+		e.FieldStart("mapDuration")
+		e.ObjStart()
+		for k, v := range m.MapDuration {
+			e.FieldStart(k)
+			jxpb.EncDuration(e, v)
+		}
+		e.ObjEnd()
+	}
 	e.ObjEnd()
 }
 
 func (m *WellKnownTypes) Decode(d *jx.Decoder) error {
 	return d.Obj(func(d *jx.Decoder, key string) error {
 		switch key {
+		case "timestamp":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			m.Timestamp = &timestamppb.Timestamp{}
+			return jxpb.DecTimestamp(d, m.Timestamp)
+		case "duration":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			m.Duration = &durationpb.Duration{}
+			return jxpb.DecDuration(d, m.Duration)
+		case "empty":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			m.Empty = &emptypb.Empty{}
+			return jxpb.DecEmpty(d, m.Empty)
+		case "fieldMask":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			m.FieldMask = &fieldmaskpb.FieldMask{}
+			return jxpb.DecFieldMask(d, m.FieldMask)
+		case "doubleWrapper":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			m.DoubleWrapper = &wrapperspb.DoubleValue{}
+			return jxpb.DecDoubleValue(d, m.DoubleWrapper)
+		case "floatWrapper":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			m.FloatWrapper = &wrapperspb.FloatValue{}
+			return jxpb.DecFloatValue(d, m.FloatWrapper)
+		case "int32Wrapper":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			m.Int32Wrapper = &wrapperspb.Int32Value{}
+			return jxpb.DecInt32Value(d, m.Int32Wrapper)
+		case "int64Wrapper":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			m.Int64Wrapper = &wrapperspb.Int64Value{}
+			return jxpb.DecInt64Value(d, m.Int64Wrapper)
+		case "uint32Wrapper":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			m.Uint32Wrapper = &wrapperspb.UInt32Value{}
+			return jxpb.DecUint32Value(d, m.Uint32Wrapper)
+		case "uint64Wrapper":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			m.Uint64Wrapper = &wrapperspb.UInt64Value{}
+			return jxpb.DecUint64Value(d, m.Uint64Wrapper)
+		case "boolWrapper":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			m.BoolWrapper = &wrapperspb.BoolValue{}
+			return jxpb.DecBoolValue(d, m.BoolWrapper)
+		case "stringWrapper":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			m.StringWrapper = &wrapperspb.StringValue{}
+			return jxpb.DecStringValue(d, m.StringWrapper)
+		case "bytesWrapper":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			m.BytesWrapper = &wrapperspb.BytesValue{}
+			return jxpb.DecBytesValue(d, m.BytesWrapper)
+		case "repeatedTimestamp":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			return d.Arr(func(d *jx.Decoder) error {
+				el := &timestamppb.Timestamp{}
+				if err := jxpb.DecTimestamp(d, el); err != nil {
+					return err
+				}
+				m.RepeatedTimestamp = append(m.RepeatedTimestamp, el)
+				return nil
+			})
+		case "mapDuration":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			if m.MapDuration == nil {
+				m.MapDuration = make(map[string]*durationpb.Duration)
+			}
+			return d.Obj(func(d *jx.Decoder, ks string) error {
+				mk := ks
+				var mv *durationpb.Duration
+				mv = &durationpb.Duration{}
+				if err := jxpb.DecDuration(d, mv); err != nil {
+					return err
+				}
+				m.MapDuration[mk] = mv
+				return nil
+			})
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}

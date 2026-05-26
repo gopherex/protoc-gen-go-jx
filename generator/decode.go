@@ -49,14 +49,17 @@ func decodeSingularCase(g *protogen.GeneratedFile, f *protogen.Field, localPath 
 		return
 	}
 	if k == kindMessage {
-		// Skip external message types (WKTs, etc.) that have no generated Decode.
-		if f.Message.GoIdent.GoImportPath != localPath {
+		if !msgSupported(f, localPath) {
 			return
 		}
 		g.P("case ", strconvQuote(f.Desc.JSONName()), ":")
 		g.P("if d.Next() == ", g.QualifiedGoIdent(jxPkg.Ident("Null")), " { return d.Null() }")
 		g.P("m.", f.GoName, " = &", f.Message.GoIdent, "{}")
-		g.P("return m.", f.GoName, ".Decode(d)")
+		if w := wktName(f); w != "" {
+			g.P("return ", g.QualifiedGoIdent(jxpbPkg.Ident("Dec"+w)), "(d, m.", f.GoName, ")")
+		} else {
+			g.P("return m.", f.GoName, ".Decode(d)")
+		}
 		return
 	}
 	g.P("case ", strconvQuote(f.Desc.JSONName()), ":")
@@ -98,15 +101,14 @@ func decodeListCase(g *protogen.GeneratedFile, f *protogen.Field, localPath prot
 		return
 	}
 	if k == kindMessage {
-		// Skip external message types (WKTs, etc.) that have no generated Decode.
-		if f.Message.GoIdent.GoImportPath != localPath {
+		if !msgSupported(f, localPath) {
 			return
 		}
 		g.P("case ", strconvQuote(f.Desc.JSONName()), ":")
 		g.P("if d.Next() == ", g.QualifiedGoIdent(jxPkg.Ident("Null")), " { return d.Null() }")
 		g.P("return d.Arr(func(d *", g.QualifiedGoIdent(jxPkg.Ident("Decoder")), ") error {")
 		g.P("el := &", f.Message.GoIdent, "{}")
-		g.P("if err := el.Decode(d); err != nil { return err }")
+		emitDecMsgValue(g, f, "el")
 		g.P("m.", f.GoName, " = append(m.", f.GoName, ", el)")
 		g.P("return nil")
 		g.P("})")
