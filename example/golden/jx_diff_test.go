@@ -24,6 +24,7 @@ type jxMessage interface {
 // Append to this as tasks land.
 var diffCases = []func() jxMessage{
 	func() jxMessage { return &pb.ScalarTypes{} },
+	func() jxMessage { return &pb.OptionalScalarTypes{} },
 }
 
 func TestDiffAgainstProtojson(t *testing.T) {
