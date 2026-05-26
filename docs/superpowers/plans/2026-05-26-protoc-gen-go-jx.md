@@ -2480,3 +2480,21 @@ git add -A && git commit -m "docs: README, easyp wiring, final verification"
 - **Infallible Encode / Any fallback:** implemented exactly as specified (T12 Step 3).
 - **Naming consistency:** generator helpers (`encodeSingular`, `emitEncElem`, `decodeSingularCase`, `decScalarExpr`, `wktName`, `emitDecElemInto`) are referenced with identical names across tasks.
 - **Known risk flagged inline:** `err` shadowing in generated map decode (T7 Step 3) — verified by compile in T7 Step 4 with a documented fix.
+
+---
+
+## Execution corrections (applied during Task 3)
+
+These two plan errors were found and fixed while executing Task 3. **All later tasks must follow the corrected forms below**, not the original snippets above.
+
+1. **Pointer-field detection.** The original `optional := f.Desc.HasPresence() && f.Oneof == nil` is wrong: a proto3 `optional` scalar is backed by a *synthetic* oneof, so `f.Oneof != nil`. Use this helper instead (lives in `generator/encode.go`):
+   ```go
+   // isPointerField reports whether the Go struct field is a pointer:
+   // true for proto3 optional scalars (synthetic oneof).
+   func isPointerField(f *protogen.Field) bool {
+       return f.Oneof != nil && f.Oneof.Desc.IsSynthetic()
+   }
+   ```
+   Everywhere a later task says `optional := f.Desc.HasPresence() && f.Oneof == nil`, use `ptr := isPointerField(f)` (message fields are handled separately in the `kindMessage` branch and are always pointers).
+
+2. **No trailing `return nil` in generated `Decode`.** Every emitted `case` returns and the `switch` has a `default` that returns, so the `switch` is itself a terminating statement. The plan's extra `g.P("return nil")` after the switch produces unreachable code and fails `go vet`. `genDecode` ends with `g.P("}")` (close switch) then `g.P("})")` (close closure+call) — **no** `return nil` between them. Any later task that adds cases must keep every case terminating with a `return`.
