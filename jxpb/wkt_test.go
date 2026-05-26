@@ -84,3 +84,19 @@ func TestAny(t *testing.T) {
 		t.Fatalf("any round-trip: %s vs %s", a, out)
 	}
 }
+
+func TestDurationNegative(t *testing.T) {
+	var e jx.Encoder
+	jxpb.EncDuration(&e, &durationpb.Duration{Seconds: -1, Nanos: -500000000})
+	if got := string(e.Bytes()); got != `"-1.500s"` {
+		t.Fatalf("neg duration = %s", got)
+	}
+}
+
+func TestTimestampNoFraction(t *testing.T) {
+	var e jx.Encoder
+	jxpb.EncTimestamp(&e, &timestamppb.Timestamp{Seconds: 0})
+	if got := string(e.Bytes()); got != `"1970-01-01T00:00:00Z"` {
+		t.Fatalf("epoch = %s", got)
+	}
+}

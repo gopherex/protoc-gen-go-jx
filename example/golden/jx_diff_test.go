@@ -45,6 +45,7 @@ var diffCases = []func() jxMessage{
 	func() jxMessage { return &pb.MutualB{} },
 	func() jxMessage { return &pb.Reserved{} },
 	func() jxMessage { return &pb.WellKnownTypes{} },
+	func() jxMessage { return &pb.Everything{} },
 }
 
 func TestDiffAgainstProtojson(t *testing.T) {
