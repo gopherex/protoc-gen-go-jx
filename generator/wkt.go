@@ -8,6 +8,7 @@ import "google.golang.org/protobuf/compiler/protogen"
 var wktCodec = map[string]string{
 	"google.protobuf.Timestamp":   "Timestamp",
 	"google.protobuf.Duration":    "Duration",
+	"google.protobuf.Any":         "Any",
 	"google.protobuf.Empty":       "Empty",
 	"google.protobuf.FieldMask":   "FieldMask",
 	"google.protobuf.DoubleValue": "DoubleValue",

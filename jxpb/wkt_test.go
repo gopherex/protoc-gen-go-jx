@@ -6,6 +6,7 @@ import (
 
 	"github.com/go-faster/jx"
 	"github.com/gopherex/protoc-gen-go-jx/jxpb"
+	anypb "google.golang.org/protobuf/types/known/anypb"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/durationpb"
 	structpb "google.golang.org/protobuf/types/known/structpb"
@@ -64,5 +65,22 @@ func TestStructValue(t *testing.T) {
 	}
 	if !proto.Equal(s, out) {
 		t.Fatalf("struct round-trip: %v vs %v", s, out)
+	}
+}
+
+func TestAny(t *testing.T) {
+	inner := &durationpb.Duration{Seconds: 3}
+	a, err := anypb.New(inner)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var e jx.Encoder
+	jxpb.EncAny(&e, a)
+	out := &anypb.Any{}
+	if err := jxpb.DecAny(jx.DecodeStr(string(e.Bytes())), out); err != nil {
+		t.Fatal(err)
+	}
+	if !proto.Equal(a, out) {
+		t.Fatalf("any round-trip: %s vs %s", a, out)
 	}
 }

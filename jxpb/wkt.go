@@ -6,6 +6,8 @@ import (
 	"time"
 
 	"github.com/go-faster/jx"
+	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/types/known/anypb"
 	"google.golang.org/protobuf/types/known/durationpb"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/fieldmaskpb"
@@ -329,4 +331,33 @@ func DecListValue(d *jx.Decoder, l *structpb.ListValue) error {
 		l.Values = append(l.Values, val)
 		return nil
 	})
+}
+
+// EncAny renders google.protobuf.Any. protojson already implements the exact
+// "@type" expansion (including WKT-valued Any -> {"@type":..,"value":..}); we
+// delegate the bytes and splice them in via Raw to stay infallible.
+func EncAny(e *jx.Encoder, a *anypb.Any) {
+	if a == nil || a.GetTypeUrl() == "" {
+		e.ObjStart()
+		e.ObjEnd()
+		return
+	}
+	b, err := protojson.Marshal(a)
+	if err != nil {
+		// best-effort: unresolved type -> {"@type": url}
+		e.ObjStart()
+		e.FieldStart("@type")
+		e.Str(a.GetTypeUrl())
+		e.ObjEnd()
+		return
+	}
+	e.Raw(b)
+}
+
+func DecAny(d *jx.Decoder, a *anypb.Any) error {
+	raw, err := d.Raw()
+	if err != nil {
+		return err
+	}
+	return protojson.Unmarshal(raw, a)
 }

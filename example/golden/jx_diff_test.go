@@ -4,11 +4,19 @@ import (
 	"encoding/json"
 	"reflect"
 	"testing"
+	"time"
 
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/reflect/protoregistry"
+	anypb "google.golang.org/protobuf/types/known/anypb"
+	"google.golang.org/protobuf/types/known/durationpb"
+	"google.golang.org/protobuf/types/known/emptypb"
+	"google.golang.org/protobuf/types/known/fieldmaskpb"
+	structpb "google.golang.org/protobuf/types/known/structpb"
+	"google.golang.org/protobuf/types/known/timestamppb"
+	"google.golang.org/protobuf/types/known/wrapperspb"
 
 	pb "github.com/gopherex/protoc-gen-go-jx/example/golden"
 )
@@ -36,6 +44,7 @@ var diffCases = []func() jxMessage{
 	func() jxMessage { return &pb.MutualA{} },
 	func() jxMessage { return &pb.MutualB{} },
 	func() jxMessage { return &pb.Reserved{} },
+	func() jxMessage { return &pb.WellKnownTypes{} },
 }
 
 func TestDiffAgainstProtojson(t *testing.T) {
@@ -142,6 +151,9 @@ func sampleValue(fd protoreflect.FieldDescriptor, depth int) protoreflect.Value 
 		vals := fd.Enum().Values()
 		return protoreflect.ValueOfEnum(vals.Get(vals.Len() - 1).Number())
 	case protoreflect.MessageKind, protoreflect.GroupKind:
+		if v, ok := sampleWKT(fd.Message()); ok {
+			return v
+		}
 		sub := newMessageValue(fd)
 		populate(sub.Message(), depth)
 		return sub
@@ -159,6 +171,53 @@ func dynamicNew(md protoreflect.MessageDescriptor) protoreflect.Message {
 		panic(err)
 	}
 	return mt.New()
+}
+
+func sampleWKT(md protoreflect.MessageDescriptor) (protoreflect.Value, bool) {
+	switch md.FullName() {
+	case "google.protobuf.Timestamp":
+		return wrapMsg(timestamppb.New(time.Unix(1700000000, 500000000).UTC())), true
+	case "google.protobuf.Duration":
+		return wrapMsg(&durationpb.Duration{Seconds: 1, Nanos: 500000000}), true
+	case "google.protobuf.Any":
+		a, _ := anypb.New(&durationpb.Duration{Seconds: 3})
+		return wrapMsg(a), true
+	case "google.protobuf.Empty":
+		return wrapMsg(&emptypb.Empty{}), true
+	case "google.protobuf.FieldMask":
+		return wrapMsg(&fieldmaskpb.FieldMask{Paths: []string{"a.b", "c"}}), true
+	case "google.protobuf.Struct":
+		s, _ := structpb.NewStruct(map[string]any{"k": "v", "n": 1.0})
+		return wrapMsg(s), true
+	case "google.protobuf.Value":
+		return wrapMsg(structpb.NewStringValue("x")), true
+	case "google.protobuf.ListValue":
+		l, _ := structpb.NewList([]any{1.0, "two"})
+		return wrapMsg(l), true
+	case "google.protobuf.DoubleValue":
+		return wrapMsg(wrapperspb.Double(1.5)), true
+	case "google.protobuf.FloatValue":
+		return wrapMsg(wrapperspb.Float(2.5)), true
+	case "google.protobuf.Int32Value":
+		return wrapMsg(wrapperspb.Int32(7)), true
+	case "google.protobuf.UInt32Value":
+		return wrapMsg(wrapperspb.UInt32(8)), true
+	case "google.protobuf.Int64Value":
+		return wrapMsg(wrapperspb.Int64(9000000000)), true
+	case "google.protobuf.UInt64Value":
+		return wrapMsg(wrapperspb.UInt64(9000000001)), true
+	case "google.protobuf.BoolValue":
+		return wrapMsg(wrapperspb.Bool(true)), true
+	case "google.protobuf.StringValue":
+		return wrapMsg(wrapperspb.String("s")), true
+	case "google.protobuf.BytesValue":
+		return wrapMsg(wrapperspb.Bytes([]byte("b"))), true
+	}
+	return protoreflect.Value{}, false
+}
+
+func wrapMsg(m proto.Message) protoreflect.Value {
+	return protoreflect.ValueOfMessage(m.ProtoReflect())
 }
 
 func sampleMapKey(fd protoreflect.FieldDescriptor) protoreflect.Value {

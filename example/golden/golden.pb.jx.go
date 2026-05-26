@@ -6,6 +6,7 @@ import (
 	fmt "fmt"
 	jx "github.com/go-faster/jx"
 	jxpb "github.com/gopherex/protoc-gen-go-jx/jxpb"
+	anypb "google.golang.org/protobuf/types/known/anypb"
 	durationpb "google.golang.org/protobuf/types/known/durationpb"
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
 	fieldmaskpb "google.golang.org/protobuf/types/known/fieldmaskpb"
@@ -2180,6 +2181,10 @@ func (m *WellKnownTypes) Encode(e *jx.Encoder) {
 		e.FieldStart("duration")
 		jxpb.EncDuration(e, m.Duration)
 	}
+	if m.Any != nil {
+		e.FieldStart("any")
+		jxpb.EncAny(e, m.Any)
+	}
 	if m.Empty != nil {
 		e.FieldStart("empty")
 		jxpb.EncEmpty(e, m.Empty)
@@ -2271,6 +2276,12 @@ func (m *WellKnownTypes) Decode(d *jx.Decoder) error {
 			}
 			m.Duration = &durationpb.Duration{}
 			return jxpb.DecDuration(d, m.Duration)
+		case "any":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			m.Any = &anypb.Any{}
+			return jxpb.DecAny(d, m.Any)
 		case "empty":
 			if d.Next() == jx.Null {
 				return d.Null()
