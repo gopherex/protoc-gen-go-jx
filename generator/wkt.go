@@ -19,6 +19,9 @@ var wktCodec = map[string]string{
 	"google.protobuf.BoolValue":   "BoolValue",
 	"google.protobuf.StringValue": "StringValue",
 	"google.protobuf.BytesValue":  "BytesValue",
+	"google.protobuf.Struct":      "Struct",
+	"google.protobuf.Value":       "Value",
+	"google.protobuf.ListValue":   "ListValue",
 }
 
 // wktName returns the jxpb codec base name for a message field, or "".

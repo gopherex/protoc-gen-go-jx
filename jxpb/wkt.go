@@ -9,6 +9,7 @@ import (
 	"google.golang.org/protobuf/types/known/durationpb"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/fieldmaskpb"
+	structpb "google.golang.org/protobuf/types/known/structpb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"google.golang.org/protobuf/types/known/wrapperspb"
 )
@@ -221,4 +222,111 @@ func DecBytesValue(d *jx.Decoder, w *wrapperspb.BytesValue) error {
 	v, err := DecBytes(d)
 	w.Value = v
 	return err
+}
+
+// --- Struct / Value / ListValue ---
+
+func EncValue(e *jx.Encoder, v *structpb.Value) {
+	switch k := v.GetKind().(type) {
+	case *structpb.Value_NullValue:
+		_ = k
+		e.Null()
+	case *structpb.Value_NumberValue:
+		EncFloat64(e, k.NumberValue)
+	case *structpb.Value_StringValue:
+		e.Str(k.StringValue)
+	case *structpb.Value_BoolValue:
+		e.Bool(k.BoolValue)
+	case *structpb.Value_StructValue:
+		EncStruct(e, k.StructValue)
+	case *structpb.Value_ListValue:
+		EncListValue(e, k.ListValue)
+	default:
+		e.Null()
+	}
+}
+
+func EncStruct(e *jx.Encoder, s *structpb.Struct) {
+	e.ObjStart()
+	for k, v := range s.GetFields() {
+		e.FieldStart(k)
+		EncValue(e, v)
+	}
+	e.ObjEnd()
+}
+
+func EncListValue(e *jx.Encoder, l *structpb.ListValue) {
+	e.ArrStart()
+	for _, v := range l.GetValues() {
+		EncValue(e, v)
+	}
+	e.ArrEnd()
+}
+
+func DecValue(d *jx.Decoder, v *structpb.Value) error {
+	switch d.Next() {
+	case jx.Null:
+		if err := d.Null(); err != nil {
+			return err
+		}
+		v.Kind = &structpb.Value_NullValue{}
+	case jx.Number:
+		n, err := d.Float64()
+		if err != nil {
+			return err
+		}
+		v.Kind = &structpb.Value_NumberValue{NumberValue: n}
+	case jx.String:
+		s, err := d.Str()
+		if err != nil {
+			return err
+		}
+		v.Kind = &structpb.Value_StringValue{StringValue: s}
+	case jx.Bool:
+		b, err := d.Bool()
+		if err != nil {
+			return err
+		}
+		v.Kind = &structpb.Value_BoolValue{BoolValue: b}
+	case jx.Object:
+		s := &structpb.Struct{}
+		if err := DecStruct(d, s); err != nil {
+			return err
+		}
+		v.Kind = &structpb.Value_StructValue{StructValue: s}
+	case jx.Array:
+		l := &structpb.ListValue{}
+		if err := DecListValue(d, l); err != nil {
+			return err
+		}
+		v.Kind = &structpb.Value_ListValue{ListValue: l}
+	default:
+		return fmt.Errorf("invalid Value token %s", d.Next())
+	}
+	return nil
+}
+
+func DecStruct(d *jx.Decoder, s *structpb.Struct) error {
+	return d.Obj(func(d *jx.Decoder, key string) error {
+		if s.Fields == nil {
+			s.Fields = map[string]*structpb.Value{}
+		}
+		val := &structpb.Value{}
+		if err := DecValue(d, val); err != nil {
+			return err
+		}
+		s.Fields[key] = val
+		return nil
+	})
+}
+
+func DecListValue(d *jx.Decoder, l *structpb.ListValue) error {
+	return d.Arr(func(d *jx.Decoder) error {
+		val := &structpb.Value{}
+		if err := DecValue(d, val); err != nil {
+			return err
+		}
+		l.Values = append(l.Values, val)
+		return nil
+	})
 }

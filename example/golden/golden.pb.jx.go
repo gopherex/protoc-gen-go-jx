@@ -9,6 +9,7 @@ import (
 	durationpb "google.golang.org/protobuf/types/known/durationpb"
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
 	fieldmaskpb "google.golang.org/protobuf/types/known/fieldmaskpb"
+	structpb "google.golang.org/protobuf/types/known/structpb"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	wrapperspb "google.golang.org/protobuf/types/known/wrapperspb"
 	strconv "strconv"
@@ -2187,6 +2188,18 @@ func (m *WellKnownTypes) Encode(e *jx.Encoder) {
 		e.FieldStart("fieldMask")
 		jxpb.EncFieldMask(e, m.FieldMask)
 	}
+	if m.Struct != nil {
+		e.FieldStart("struct")
+		jxpb.EncStruct(e, m.Struct)
+	}
+	if m.Value != nil {
+		e.FieldStart("value")
+		jxpb.EncValue(e, m.Value)
+	}
+	if m.ListValue != nil {
+		e.FieldStart("listValue")
+		jxpb.EncListValue(e, m.ListValue)
+	}
 	if m.DoubleWrapper != nil {
 		e.FieldStart("doubleWrapper")
 		jxpb.EncDoubleValue(e, m.DoubleWrapper)
@@ -2270,6 +2283,24 @@ func (m *WellKnownTypes) Decode(d *jx.Decoder) error {
 			}
 			m.FieldMask = &fieldmaskpb.FieldMask{}
 			return jxpb.DecFieldMask(d, m.FieldMask)
+		case "struct":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			m.Struct = &structpb.Struct{}
+			return jxpb.DecStruct(d, m.Struct)
+		case "value":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			m.Value = &structpb.Value{}
+			return jxpb.DecValue(d, m.Value)
+		case "listValue":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			m.ListValue = &structpb.ListValue{}
+			return jxpb.DecListValue(d, m.ListValue)
 		case "doubleWrapper":
 			if d.Next() == jx.Null {
 				return d.Null()

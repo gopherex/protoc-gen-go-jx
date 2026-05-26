@@ -6,7 +6,9 @@ import (
 
 	"github.com/go-faster/jx"
 	"github.com/gopherex/protoc-gen-go-jx/jxpb"
+	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/durationpb"
+	structpb "google.golang.org/protobuf/types/known/structpb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"google.golang.org/protobuf/types/known/wrapperspb"
 )
@@ -49,5 +51,18 @@ func TestInt64Wrapper(t *testing.T) {
 	jxpb.EncInt64Value(&e, &wrapperspb.Int64Value{Value: 42})
 	if got := string(e.Bytes()); got != `"42"` {
 		t.Fatalf("EncInt64Value = %s", got)
+	}
+}
+
+func TestStructValue(t *testing.T) {
+	s, _ := structpb.NewStruct(map[string]any{"a": 1.0, "b": "x", "c": []any{true, nil}})
+	var e jx.Encoder
+	jxpb.EncStruct(&e, s)
+	out := &structpb.Struct{}
+	if err := jxpb.DecStruct(jx.DecodeStr(string(e.Bytes())), out); err != nil {
+		t.Fatal(err)
+	}
+	if !proto.Equal(s, out) {
+		t.Fatalf("struct round-trip: %v vs %v", s, out)
 	}
 }
