@@ -14,7 +14,11 @@ func genEncode(g *protogen.GeneratedFile, m *protogen.Message) {
 		if f.Oneof != nil && !f.Oneof.Desc.IsSynthetic() {
 			continue
 		}
-		if f.Desc.IsList() || f.Desc.IsMap() {
+		if f.Desc.IsMap() {
+			continue
+		}
+		if f.Desc.IsList() {
+			encodeList(g, f)
 			continue
 		}
 		encodeSingular(g, f)
@@ -81,6 +85,48 @@ func encodeSingular(g *protogen.GeneratedFile, f *protogen.Field) {
 		g.P("}")
 	default:
 		// kindEnum, kindMessage, kindOther: not yet implemented; emit nothing
+	}
+}
+
+// encodeList emits an array for a repeated field, omitted when empty.
+func encodeList(g *protogen.GeneratedFile, f *protogen.Field) {
+	k := classify(f.Desc)
+	if k == kindEnum || k == kindMessage || k == kindOther {
+		return // later tasks
+	}
+	get := "m." + f.GoName
+	g.P("if len(", get, ") > 0 {")
+	g.P("e.FieldStart(", strconvQuote(f.Desc.JSONName()), ")")
+	g.P("e.ArrStart()")
+	g.P("for _, v := range ", get, " {")
+	emitEncElem(g, f, "v")
+	g.P("}")
+	g.P("e.ArrEnd()")
+	g.P("}")
+}
+
+// emitEncElem writes one array/map element value. Scalars only in this task;
+// enum/message added in a later task.
+func emitEncElem(g *protogen.GeneratedFile, f *protogen.Field, v string) {
+	switch classify(f.Desc) {
+	case kindInt32:
+		g.P("e.Int32(", v, ")")
+	case kindUint32:
+		g.P("e.UInt32(", v, ")")
+	case kindInt64:
+		g.P(g.QualifiedGoIdent(jxpbPkg.Ident("EncInt64")), "(e, ", v, ")")
+	case kindUint64:
+		g.P(g.QualifiedGoIdent(jxpbPkg.Ident("EncUint64")), "(e, ", v, ")")
+	case kindFloat32:
+		g.P(g.QualifiedGoIdent(jxpbPkg.Ident("EncFloat32")), "(e, ", v, ")")
+	case kindFloat64:
+		g.P(g.QualifiedGoIdent(jxpbPkg.Ident("EncFloat64")), "(e, ", v, ")")
+	case kindBool:
+		g.P("e.Bool(", v, ")")
+	case kindString:
+		g.P("e.Str(", v, ")")
+	case kindBytes:
+		g.P(g.QualifiedGoIdent(jxpbPkg.Ident("EncBytes")), "(e, ", v, ")")
 	}
 }
 

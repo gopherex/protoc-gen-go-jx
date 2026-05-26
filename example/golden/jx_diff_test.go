@@ -25,6 +25,7 @@ type jxMessage interface {
 var diffCases = []func() jxMessage{
 	func() jxMessage { return &pb.ScalarTypes{} },
 	func() jxMessage { return &pb.OptionalScalarTypes{} },
+	func() jxMessage { return &pb.RepeatedScalarTypes{} },
 }
 
 func TestDiffAgainstProtojson(t *testing.T) {

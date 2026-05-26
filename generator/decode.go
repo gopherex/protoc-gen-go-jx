@@ -11,7 +11,11 @@ func genDecode(g *protogen.GeneratedFile, m *protogen.Message) {
 		if f.Oneof != nil && !f.Oneof.Desc.IsSynthetic() {
 			continue
 		}
-		if f.Desc.IsList() || f.Desc.IsMap() {
+		if f.Desc.IsMap() {
+			continue
+		}
+		if f.Desc.IsList() {
+			decodeListCase(g, f)
 			continue
 		}
 		decodeSingularCase(g, f)
@@ -52,6 +56,23 @@ func decodeSingularCase(g *protogen.GeneratedFile, f *protogen.Field) {
 		g.P("m.", f.GoName, " = v")
 	}
 	g.P("return nil")
+}
+
+// decodeListCase reads a JSON array into a repeated scalar field.
+func decodeListCase(g *protogen.GeneratedFile, f *protogen.Field) {
+	k := classify(f.Desc)
+	if k == kindEnum || k == kindMessage || k == kindOther {
+		return // later tasks
+	}
+	g.P("case ", strconvQuote(f.Desc.JSONName()), ":")
+	g.P("if d.Next() == ", g.QualifiedGoIdent(jxPkg.Ident("Null")), " { return d.Null() }")
+	g.P("return d.Arr(func(d *", g.QualifiedGoIdent(jxPkg.Ident("Decoder")), ") error {")
+	dec, _ := decScalarExpr(g, f)
+	g.P("v, err := ", dec)
+	g.P("if err != nil { return err }")
+	g.P("m.", f.GoName, " = append(m.", f.GoName, ", v)")
+	g.P("return nil")
+	g.P("})")
 }
 
 // decScalarExpr returns the decode call expression and the resulting Go type.
