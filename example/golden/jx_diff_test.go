@@ -26,6 +26,9 @@ var diffCases = []func() jxMessage{
 	func() jxMessage { return &pb.ScalarTypes{} },
 	func() jxMessage { return &pb.OptionalScalarTypes{} },
 	func() jxMessage { return &pb.RepeatedScalarTypes{} },
+	func() jxMessage { return &pb.EnumAndMessageFields{} },
+	func() jxMessage { return &pb.Outer{} },
+	func() jxMessage { return &pb.Outer_Inner{} },
 }
 
 func TestDiffAgainstProtojson(t *testing.T) {

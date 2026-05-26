@@ -2,7 +2,7 @@ package generator
 
 import "google.golang.org/protobuf/compiler/protogen"
 
-func genEncode(g *protogen.GeneratedFile, m *protogen.Message) {
+func genEncode(g *protogen.GeneratedFile, m *protogen.Message, localPath protogen.GoImportPath) {
 	g.P("func (m *", m.GoIdent, ") Encode(e *", jxPkg.Ident("Encoder"), ") {")
 	g.P("if m == nil {")
 	g.P("e.ObjStart()")
@@ -18,10 +18,10 @@ func genEncode(g *protogen.GeneratedFile, m *protogen.Message) {
 			continue
 		}
 		if f.Desc.IsList() {
-			encodeList(g, f)
+			encodeList(g, f, localPath)
 			continue
 		}
-		encodeSingular(g, f)
+		encodeSingular(g, f, localPath)
 	}
 	g.P("e.ObjEnd()")
 	g.P("}")
@@ -35,7 +35,7 @@ func isPointerField(f *protogen.Field) bool {
 }
 
 // encodeSingular emits encode logic for one non-list, non-map field.
-func encodeSingular(g *protogen.GeneratedFile, f *protogen.Field) {
+func encodeSingular(g *protogen.GeneratedFile, f *protogen.Field, localPath protogen.GoImportPath) {
 	name := f.Desc.JSONName()
 	get := "m." + f.GoName
 	ptr := isPointerField(f)
@@ -83,16 +83,54 @@ func encodeSingular(g *protogen.GeneratedFile, f *protogen.Field) {
 		g.P("e.FieldStart(", strconvQuote(name), ")")
 		g.P(g.QualifiedGoIdent(jxpbPkg.Ident("EncBytes")), "(e, ", get, ")")
 		g.P("}")
+	case kindEnum:
+		if ptr {
+			g.P("if ", get, " != nil {")
+			g.P("e.FieldStart(", strconvQuote(name), ")")
+			emitEncEnum(g, f, "*"+get)
+			g.P("}")
+		} else {
+			g.P("if ", get, " != 0 {")
+			g.P("e.FieldStart(", strconvQuote(name), ")")
+			emitEncEnum(g, f, get)
+			g.P("}")
+		}
+	case kindMessage:
+		// message field is always a pointer; emit when non-nil.
+		// Skip external messages (WKTs, etc.) that have no generated Encode.
+		if f.Message.GoIdent.GoImportPath != localPath {
+			break
+		}
+		g.P("if ", get, " != nil {")
+		g.P("e.FieldStart(", strconvQuote(name), ")")
+		g.P(get, ".Encode(e)")
+		g.P("}")
 	default:
-		// kindEnum, kindMessage, kindOther: not yet implemented; emit nothing
+		// kindOther: emit nothing
 	}
 }
 
+// emitEncEnum writes an enum value as its string name, or its number when the
+// number has no registered name. Reuses the <Enum>_name map from the .pb.go.
+func emitEncEnum(g *protogen.GeneratedFile, f *protogen.Field, val string) {
+	enumGo := f.Enum.GoIdent
+	nameMap := g.QualifiedGoIdent(protogen.GoIdent{GoName: enumGo.GoName + "_name", GoImportPath: enumGo.GoImportPath})
+	g.P("if s, ok := ", nameMap, "[int32(", val, ")]; ok {")
+	g.P("e.Str(s)")
+	g.P("} else {")
+	g.P("e.Int32(int32(", val, "))")
+	g.P("}")
+}
+
 // encodeList emits an array for a repeated field, omitted when empty.
-func encodeList(g *protogen.GeneratedFile, f *protogen.Field) {
+func encodeList(g *protogen.GeneratedFile, f *protogen.Field, localPath protogen.GoImportPath) {
 	k := classify(f.Desc)
-	if k == kindEnum || k == kindMessage || k == kindOther {
-		return // later tasks
+	if k == kindOther {
+		return
+	}
+	// Skip external message types (WKTs, etc.) that have no generated Encode.
+	if k == kindMessage && f.Message.GoIdent.GoImportPath != localPath {
+		return
 	}
 	get := "m." + f.GoName
 	g.P("if len(", get, ") > 0 {")
@@ -127,6 +165,10 @@ func emitEncElem(g *protogen.GeneratedFile, f *protogen.Field, v string) {
 		g.P("e.Str(", v, ")")
 	case kindBytes:
 		g.P(g.QualifiedGoIdent(jxpbPkg.Ident("EncBytes")), "(e, ", v, ")")
+	case kindEnum:
+		emitEncEnum(g, f, v)
+	case kindMessage:
+		g.P(v, ".Encode(e)")
 	}
 }
 

@@ -825,12 +825,65 @@ func (m *Outer) Encode(e *jx.Encoder) {
 		return
 	}
 	e.ObjStart()
+	if m.Inner != nil {
+		e.FieldStart("inner")
+		m.Inner.Encode(e)
+	}
+	if m.EnumField != 0 {
+		e.FieldStart("enumField")
+		if s, ok := Outer_NestedEnum_name[int32(m.EnumField)]; ok {
+			e.Str(s)
+		} else {
+			e.Int32(int32(m.EnumField))
+		}
+	}
+	if m.DeepInner != nil {
+		e.FieldStart("deepInner")
+		m.DeepInner.Encode(e)
+	}
 	e.ObjEnd()
 }
 
 func (m *Outer) Decode(d *jx.Decoder) error {
 	return d.Obj(func(d *jx.Decoder, key string) error {
 		switch key {
+		case "inner":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			m.Inner = &Outer_Inner{}
+			return m.Inner.Decode(d)
+		case "enumField":
+			switch d.Next() {
+			case jx.String:
+				s, err := d.Str()
+				if err != nil {
+					return err
+				}
+				n, ok := Outer_NestedEnum_value[s]
+				if !ok {
+					return fmt.Errorf("unknown enum value %q", s)
+				}
+				m.EnumField = Outer_NestedEnum(n)
+				return nil
+			case jx.Number:
+				n, err := d.Int32()
+				if err != nil {
+					return err
+				}
+				m.EnumField = Outer_NestedEnum(n)
+				return nil
+			case jx.Null:
+				return d.Null()
+			default:
+				return fmt.Errorf("invalid enum token %s", d.Next())
+			}
+		case "deepInner":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			m.DeepInner = &Outer_Inner_DeepInner{}
+			return m.DeepInner.Decode(d)
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
@@ -855,12 +908,55 @@ func (m *Outer_Inner) Encode(e *jx.Encoder) {
 		return
 	}
 	e.ObjStart()
+	if m.NestedEnum != 0 {
+		e.FieldStart("nestedEnum")
+		if s, ok := Outer_NestedEnum_name[int32(m.NestedEnum)]; ok {
+			e.Str(s)
+		} else {
+			e.Int32(int32(m.NestedEnum))
+		}
+	}
+	if m.Deep != nil {
+		e.FieldStart("deep")
+		m.Deep.Encode(e)
+	}
 	e.ObjEnd()
 }
 
 func (m *Outer_Inner) Decode(d *jx.Decoder) error {
 	return d.Obj(func(d *jx.Decoder, key string) error {
 		switch key {
+		case "nestedEnum":
+			switch d.Next() {
+			case jx.String:
+				s, err := d.Str()
+				if err != nil {
+					return err
+				}
+				n, ok := Outer_NestedEnum_value[s]
+				if !ok {
+					return fmt.Errorf("unknown enum value %q", s)
+				}
+				m.NestedEnum = Outer_NestedEnum(n)
+				return nil
+			case jx.Number:
+				n, err := d.Int32()
+				if err != nil {
+					return err
+				}
+				m.NestedEnum = Outer_NestedEnum(n)
+				return nil
+			case jx.Null:
+				return d.Null()
+			default:
+				return fmt.Errorf("invalid enum token %s", d.Next())
+			}
+		case "deep":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			m.Deep = &Outer_Inner_DeepInner{}
+			return m.Deep.Decode(d)
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
@@ -929,12 +1025,202 @@ func (m *EnumAndMessageFields) Encode(e *jx.Encoder) {
 		return
 	}
 	e.ObjStart()
+	if m.SingularEnum != 0 {
+		e.FieldStart("singularEnum")
+		if s, ok := TopLevelEnum_name[int32(m.SingularEnum)]; ok {
+			e.Str(s)
+		} else {
+			e.Int32(int32(m.SingularEnum))
+		}
+	}
+	if m.OptionalEnum != nil {
+		e.FieldStart("optionalEnum")
+		if s, ok := TopLevelEnum_name[int32(*m.OptionalEnum)]; ok {
+			e.Str(s)
+		} else {
+			e.Int32(int32(*m.OptionalEnum))
+		}
+	}
+	if len(m.RepeatedEnum) > 0 {
+		e.FieldStart("repeatedEnum")
+		e.ArrStart()
+		for _, v := range m.RepeatedEnum {
+			if s, ok := TopLevelEnum_name[int32(v)]; ok {
+				e.Str(s)
+			} else {
+				e.Int32(int32(v))
+			}
+		}
+		e.ArrEnd()
+	}
+	if m.SingularMessage != nil {
+		e.FieldStart("singularMessage")
+		m.SingularMessage.Encode(e)
+	}
+	if m.OptionalMessage != nil {
+		e.FieldStart("optionalMessage")
+		m.OptionalMessage.Encode(e)
+	}
+	if len(m.RepeatedMessage) > 0 {
+		e.FieldStart("repeatedMessage")
+		e.ArrStart()
+		for _, v := range m.RepeatedMessage {
+			v.Encode(e)
+		}
+		e.ArrEnd()
+	}
+	if m.NestedEnum != 0 {
+		e.FieldStart("nestedEnum")
+		if s, ok := Outer_NestedEnum_name[int32(m.NestedEnum)]; ok {
+			e.Str(s)
+		} else {
+			e.Int32(int32(m.NestedEnum))
+		}
+	}
+	if m.NestedMessage != nil {
+		e.FieldStart("nestedMessage")
+		m.NestedMessage.Encode(e)
+	}
 	e.ObjEnd()
 }
 
 func (m *EnumAndMessageFields) Decode(d *jx.Decoder) error {
 	return d.Obj(func(d *jx.Decoder, key string) error {
 		switch key {
+		case "singularEnum":
+			switch d.Next() {
+			case jx.String:
+				s, err := d.Str()
+				if err != nil {
+					return err
+				}
+				n, ok := TopLevelEnum_value[s]
+				if !ok {
+					return fmt.Errorf("unknown enum value %q", s)
+				}
+				m.SingularEnum = TopLevelEnum(n)
+				return nil
+			case jx.Number:
+				n, err := d.Int32()
+				if err != nil {
+					return err
+				}
+				m.SingularEnum = TopLevelEnum(n)
+				return nil
+			case jx.Null:
+				return d.Null()
+			default:
+				return fmt.Errorf("invalid enum token %s", d.Next())
+			}
+		case "optionalEnum":
+			switch d.Next() {
+			case jx.String:
+				s, err := d.Str()
+				if err != nil {
+					return err
+				}
+				n, ok := TopLevelEnum_value[s]
+				if !ok {
+					return fmt.Errorf("unknown enum value %q", s)
+				}
+				v := TopLevelEnum(n)
+				m.OptionalEnum = &v
+				return nil
+			case jx.Number:
+				n, err := d.Int32()
+				if err != nil {
+					return err
+				}
+				v := TopLevelEnum(n)
+				m.OptionalEnum = &v
+				return nil
+			case jx.Null:
+				return d.Null()
+			default:
+				return fmt.Errorf("invalid enum token %s", d.Next())
+			}
+		case "repeatedEnum":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			return d.Arr(func(d *jx.Decoder) error {
+				var n int32
+				switch d.Next() {
+				case jx.String:
+					s, err := d.Str()
+					if err != nil {
+						return err
+					}
+					v, ok := TopLevelEnum_value[s]
+					if !ok {
+						return fmt.Errorf("unknown enum value %q", s)
+					}
+					n = v
+				default:
+					v, err := d.Int32()
+					if err != nil {
+						return err
+					}
+					n = v
+				}
+				m.RepeatedEnum = append(m.RepeatedEnum, TopLevelEnum(n))
+				return nil
+			})
+		case "singularMessage":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			m.SingularMessage = &ScalarTypes{}
+			return m.SingularMessage.Decode(d)
+		case "optionalMessage":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			m.OptionalMessage = &ScalarTypes{}
+			return m.OptionalMessage.Decode(d)
+		case "repeatedMessage":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			return d.Arr(func(d *jx.Decoder) error {
+				el := &ScalarTypes{}
+				if err := el.Decode(d); err != nil {
+					return err
+				}
+				m.RepeatedMessage = append(m.RepeatedMessage, el)
+				return nil
+			})
+		case "nestedEnum":
+			switch d.Next() {
+			case jx.String:
+				s, err := d.Str()
+				if err != nil {
+					return err
+				}
+				n, ok := Outer_NestedEnum_value[s]
+				if !ok {
+					return fmt.Errorf("unknown enum value %q", s)
+				}
+				m.NestedEnum = Outer_NestedEnum(n)
+				return nil
+			case jx.Number:
+				n, err := d.Int32()
+				if err != nil {
+					return err
+				}
+				m.NestedEnum = Outer_NestedEnum(n)
+				return nil
+			case jx.Null:
+				return d.Null()
+			default:
+				return fmt.Errorf("invalid enum token %s", d.Next())
+			}
+		case "nestedMessage":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			m.NestedMessage = &Outer_Inner{}
+			return m.NestedMessage.Decode(d)
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
@@ -1097,6 +1383,18 @@ func (m *TreeNode) Encode(e *jx.Encoder) {
 		e.FieldStart("id")
 		e.Str(m.Id)
 	}
+	if m.Parent != nil {
+		e.FieldStart("parent")
+		m.Parent.Encode(e)
+	}
+	if len(m.Children) > 0 {
+		e.FieldStart("children")
+		e.ArrStart()
+		for _, v := range m.Children {
+			v.Encode(e)
+		}
+		e.ArrEnd()
+	}
 	e.ObjEnd()
 }
 
@@ -1113,6 +1411,24 @@ func (m *TreeNode) Decode(d *jx.Decoder) error {
 			}
 			m.Id = v
 			return nil
+		case "parent":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			m.Parent = &TreeNode{}
+			return m.Parent.Decode(d)
+		case "children":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			return d.Arr(func(d *jx.Decoder) error {
+				el := &TreeNode{}
+				if err := el.Decode(d); err != nil {
+					return err
+				}
+				m.Children = append(m.Children, el)
+				return nil
+			})
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
@@ -1137,12 +1453,22 @@ func (m *MutualA) Encode(e *jx.Encoder) {
 		return
 	}
 	e.ObjStart()
+	if m.B != nil {
+		e.FieldStart("b")
+		m.B.Encode(e)
+	}
 	e.ObjEnd()
 }
 
 func (m *MutualA) Decode(d *jx.Decoder) error {
 	return d.Obj(func(d *jx.Decoder, key string) error {
 		switch key {
+		case "b":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			m.B = &MutualB{}
+			return m.B.Decode(d)
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
@@ -1167,12 +1493,22 @@ func (m *MutualB) Encode(e *jx.Encoder) {
 		return
 	}
 	e.ObjStart()
+	if m.A != nil {
+		e.FieldStart("a")
+		m.A.Encode(e)
+	}
 	e.ObjEnd()
 }
 
 func (m *MutualB) Decode(d *jx.Decoder) error {
 	return d.Obj(func(d *jx.Decoder, key string) error {
 		switch key {
+		case "a":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			m.A = &MutualA{}
+			return m.A.Decode(d)
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
@@ -1241,12 +1577,132 @@ func (m *Everything) Encode(e *jx.Encoder) {
 		return
 	}
 	e.ObjStart()
+	if m.Scalars != nil {
+		e.FieldStart("scalars")
+		m.Scalars.Encode(e)
+	}
+	if m.Optionals != nil {
+		e.FieldStart("optionals")
+		m.Optionals.Encode(e)
+	}
+	if m.Repeateds != nil {
+		e.FieldStart("repeateds")
+		m.Repeateds.Encode(e)
+	}
+	if m.EnumsAndMessages != nil {
+		e.FieldStart("enumsAndMessages")
+		m.EnumsAndMessages.Encode(e)
+	}
+	if m.MapKeys != nil {
+		e.FieldStart("mapKeys")
+		m.MapKeys.Encode(e)
+	}
+	if m.MapValues != nil {
+		e.FieldStart("mapValues")
+		m.MapValues.Encode(e)
+	}
+	if m.Oneof != nil {
+		e.FieldStart("oneof")
+		m.Oneof.Encode(e)
+	}
+	if m.WellKnown != nil {
+		e.FieldStart("wellKnown")
+		m.WellKnown.Encode(e)
+	}
+	if m.Tree != nil {
+		e.FieldStart("tree")
+		m.Tree.Encode(e)
+	}
+	if m.Reserved != nil {
+		e.FieldStart("reserved")
+		m.Reserved.Encode(e)
+	}
+	if len(m.Recursive) > 0 {
+		e.FieldStart("recursive")
+		e.ArrStart()
+		for _, v := range m.Recursive {
+			v.Encode(e)
+		}
+		e.ArrEnd()
+	}
 	e.ObjEnd()
 }
 
 func (m *Everything) Decode(d *jx.Decoder) error {
 	return d.Obj(func(d *jx.Decoder, key string) error {
 		switch key {
+		case "scalars":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			m.Scalars = &ScalarTypes{}
+			return m.Scalars.Decode(d)
+		case "optionals":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			m.Optionals = &OptionalScalarTypes{}
+			return m.Optionals.Decode(d)
+		case "repeateds":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			m.Repeateds = &RepeatedScalarTypes{}
+			return m.Repeateds.Decode(d)
+		case "enumsAndMessages":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			m.EnumsAndMessages = &EnumAndMessageFields{}
+			return m.EnumsAndMessages.Decode(d)
+		case "mapKeys":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			m.MapKeys = &MapKeyTypes{}
+			return m.MapKeys.Decode(d)
+		case "mapValues":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			m.MapValues = &MapValueTypes{}
+			return m.MapValues.Decode(d)
+		case "oneof":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			m.Oneof = &OneofContainer{}
+			return m.Oneof.Decode(d)
+		case "wellKnown":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			m.WellKnown = &WellKnownTypes{}
+			return m.WellKnown.Decode(d)
+		case "tree":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			m.Tree = &TreeNode{}
+			return m.Tree.Decode(d)
+		case "reserved":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			m.Reserved = &Reserved{}
+			return m.Reserved.Decode(d)
+		case "recursive":
+			if d.Next() == jx.Null {
+				return d.Null()
+			}
+			return d.Arr(func(d *jx.Decoder) error {
+				el := &Everything{}
+				if err := el.Decode(d); err != nil {
+					return err
+				}
+				m.Recursive = append(m.Recursive, el)
+				return nil
+			})
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
