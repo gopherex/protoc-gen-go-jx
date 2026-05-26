@@ -20,10 +20,9 @@ func GenerateFile(plugin *protogen.Plugin, file *protogen.File) error {
 	g.P()
 	g.P("package ", file.GoPackageName)
 	g.P()
-	localPath := file.GoImportPath
 	for _, m := range msgs {
-		genEncode(g, m, localPath)
-		genDecode(g, m, localPath)
+		genEncode(g, m)
+		genDecode(g, m)
 		genJSONWrappers(g, m)
 	}
 	return nil

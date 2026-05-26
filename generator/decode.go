@@ -2,7 +2,7 @@ package generator
 
 import "google.golang.org/protobuf/compiler/protogen"
 
-func genDecode(g *protogen.GeneratedFile, m *protogen.Message, localPath protogen.GoImportPath) {
+func genDecode(g *protogen.GeneratedFile, m *protogen.Message) {
 	jxDec := jxPkg.Ident("Decoder")
 	g.P("func (m *", m.GoIdent, ") Decode(d *", jxDec, ") error {")
 	g.P("return d.Obj(func(d *", jxDec, ", key string) error {")
@@ -12,14 +12,14 @@ func genDecode(g *protogen.GeneratedFile, m *protogen.Message, localPath protoge
 			continue
 		}
 		if f.Desc.IsMap() {
-			decodeMapCase(g, f, localPath)
+			decodeMapCase(g, f)
 			continue
 		}
 		if f.Desc.IsList() {
-			decodeListCase(g, f, localPath)
+			decodeListCase(g, f)
 			continue
 		}
-		decodeSingularCase(g, f, localPath)
+		decodeSingularCase(g, f)
 	}
 	for _, oo := range m.Oneofs {
 		if oo.Desc.IsSynthetic() {
@@ -38,7 +38,7 @@ func genDecode(g *protogen.GeneratedFile, m *protogen.Message, localPath protoge
 }
 
 // decodeSingularCase emits `case "<json>":` for one scalar field.
-func decodeSingularCase(g *protogen.GeneratedFile, f *protogen.Field, localPath protogen.GoImportPath) {
+func decodeSingularCase(g *protogen.GeneratedFile, f *protogen.Field) {
 	k := classify(f.Desc)
 	if k == kindOther {
 		return
@@ -49,9 +49,6 @@ func decodeSingularCase(g *protogen.GeneratedFile, f *protogen.Field, localPath 
 		return
 	}
 	if k == kindMessage {
-		if !msgSupported(f, localPath) {
-			return
-		}
 		g.P("case ", strconvQuote(f.Desc.JSONName()), ":")
 		g.P("if d.Next() == ", g.QualifiedGoIdent(jxPkg.Ident("Null")), " { return d.Null() }")
 		g.P("m.", f.GoName, " = &", f.Message.GoIdent, "{}")
@@ -87,7 +84,7 @@ func decodeSingularCase(g *protogen.GeneratedFile, f *protogen.Field, localPath 
 }
 
 // decodeListCase reads a JSON array into a repeated scalar field.
-func decodeListCase(g *protogen.GeneratedFile, f *protogen.Field, localPath protogen.GoImportPath) {
+func decodeListCase(g *protogen.GeneratedFile, f *protogen.Field) {
 	k := classify(f.Desc)
 	if k == kindOther {
 		return
@@ -101,9 +98,6 @@ func decodeListCase(g *protogen.GeneratedFile, f *protogen.Field, localPath prot
 		return
 	}
 	if k == kindMessage {
-		if !msgSupported(f, localPath) {
-			return
-		}
 		g.P("case ", strconvQuote(f.Desc.JSONName()), ":")
 		g.P("if d.Next() == ", g.QualifiedGoIdent(jxPkg.Ident("Null")), " { return d.Null() }")
 		g.P("return d.Arr(func(d *", g.QualifiedGoIdent(jxPkg.Ident("Decoder")), ") error {")

@@ -33,12 +33,6 @@ func wktName(f *protogen.Field) string {
 	return wktCodec[string(f.Message.Desc.FullName())]
 }
 
-// msgSupported reports whether a message-typed field can be (de)serialized:
-// a known WKT, or a message generated in this same package.
-func msgSupported(f *protogen.Field, localPath protogen.GoImportPath) bool {
-	return wktName(f) != "" || f.Message.GoIdent.GoImportPath == localPath
-}
-
 // emitEncMsgValue emits the encode call for a message value expression `expr`.
 func emitEncMsgValue(g *protogen.GeneratedFile, f *protogen.Field, expr string) {
 	if w := wktName(f); w != "" {

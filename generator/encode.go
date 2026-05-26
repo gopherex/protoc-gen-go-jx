@@ -2,7 +2,7 @@ package generator
 
 import "google.golang.org/protobuf/compiler/protogen"
 
-func genEncode(g *protogen.GeneratedFile, m *protogen.Message, localPath protogen.GoImportPath) {
+func genEncode(g *protogen.GeneratedFile, m *protogen.Message) {
 	g.P("func (m *", m.GoIdent, ") Encode(e *", jxPkg.Ident("Encoder"), ") {")
 	g.P("if m == nil {")
 	g.P("e.ObjStart()")
@@ -15,14 +15,14 @@ func genEncode(g *protogen.GeneratedFile, m *protogen.Message, localPath protoge
 			continue
 		}
 		if f.Desc.IsMap() {
-			encodeMap(g, f, localPath)
+			encodeMap(g, f)
 			continue
 		}
 		if f.Desc.IsList() {
-			encodeList(g, f, localPath)
+			encodeList(g, f)
 			continue
 		}
-		encodeSingular(g, f, localPath)
+		encodeSingular(g, f)
 	}
 	for _, oo := range m.Oneofs {
 		if oo.Desc.IsSynthetic() {
@@ -53,7 +53,7 @@ func isPointerField(f *protogen.Field) bool {
 }
 
 // encodeSingular emits encode logic for one non-list, non-map field.
-func encodeSingular(g *protogen.GeneratedFile, f *protogen.Field, localPath protogen.GoImportPath) {
+func encodeSingular(g *protogen.GeneratedFile, f *protogen.Field) {
 	name := f.Desc.JSONName()
 	get := "m." + f.GoName
 	ptr := isPointerField(f)
@@ -114,9 +114,8 @@ func encodeSingular(g *protogen.GeneratedFile, f *protogen.Field, localPath prot
 			g.P("}")
 		}
 	case kindMessage:
-		if !msgSupported(f, localPath) {
-			break
-		}
+		// WKT routes to jxpb; any other message (incl. cross-package) is
+		// assumed to have generated Encode (loud compile error otherwise).
 		g.P("if ", get, " != nil {")
 		g.P("e.FieldStart(", strconvQuote(name), ")")
 		emitEncMsgValue(g, f, get)
@@ -139,12 +138,9 @@ func emitEncEnum(g *protogen.GeneratedFile, f *protogen.Field, val string) {
 }
 
 // encodeList emits an array for a repeated field, omitted when empty.
-func encodeList(g *protogen.GeneratedFile, f *protogen.Field, localPath protogen.GoImportPath) {
+func encodeList(g *protogen.GeneratedFile, f *protogen.Field) {
 	k := classify(f.Desc)
 	if k == kindOther {
-		return
-	}
-	if k == kindMessage && !msgSupported(f, localPath) {
 		return
 	}
 	get := "m." + f.GoName

@@ -7,11 +7,8 @@ import (
 
 // encodeMap emits a JSON object for a map field, omitted when empty. Map keys
 // are always rendered as JSON strings.
-func encodeMap(g *protogen.GeneratedFile, f *protogen.Field, localPath protogen.GoImportPath) {
+func encodeMap(g *protogen.GeneratedFile, f *protogen.Field) {
 	val := f.Message.Fields[1]
-	if classify(val.Desc) == kindMessage && !msgSupported(val, localPath) {
-		return
-	}
 	get := "m." + f.GoName
 	g.P("if len(", get, ") > 0 {")
 	g.P("e.FieldStart(", strconvQuote(f.Desc.JSONName()), ")")
@@ -44,11 +41,8 @@ func mapKeyToString(g *protogen.GeneratedFile, fd protoreflect.FieldDescriptor, 
 }
 
 // decodeMapCase reads a JSON object into a map field.
-func decodeMapCase(g *protogen.GeneratedFile, f *protogen.Field, localPath protogen.GoImportPath) {
+func decodeMapCase(g *protogen.GeneratedFile, f *protogen.Field) {
 	val := f.Message.Fields[1]
-	if classify(val.Desc) == kindMessage && !msgSupported(val, localPath) {
-		return
-	}
 	jxDec := g.QualifiedGoIdent(jxPkg.Ident("Decoder"))
 	g.P("case ", strconvQuote(f.Desc.JSONName()), ":")
 	g.P("if d.Next() == ", g.QualifiedGoIdent(jxPkg.Ident("Null")), " { return d.Null() }")
