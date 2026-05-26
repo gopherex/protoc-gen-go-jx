@@ -44,7 +44,7 @@ func mapKeyToString(g *protogen.GeneratedFile, fd protoreflect.FieldDescriptor, 
 func decodeMapCase(g *protogen.GeneratedFile, f *protogen.Field) {
 	val := f.Message.Fields[1]
 	jxDec := g.QualifiedGoIdent(jxPkg.Ident("Decoder"))
-	g.P("case ", strconvQuote(f.Desc.JSONName()), ":")
+	emitFieldCaseHead(g, f)
 	g.P("if d.Next() == ", g.QualifiedGoIdent(jxPkg.Ident("Null")), " { return d.Null() }")
 	g.P("if m.", f.GoName, " == nil {")
 	g.P("m.", f.GoName, " = make(", mapGoType(g, f), ")")

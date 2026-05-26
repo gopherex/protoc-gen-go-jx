@@ -5,6 +5,9 @@ import "google.golang.org/protobuf/compiler/protogen"
 func genDecode(g *protogen.GeneratedFile, m *protogen.Message) {
 	jxDec := jxPkg.Ident("Decoder")
 	g.P("func (m *", m.GoIdent, ") Decode(d *", jxDec, ") error {")
+	if decodeHasCases(m) {
+		g.P("seen := map[string]bool{}")
+	}
 	g.P("return d.Obj(func(d *", jxDec, ", key string) error {")
 	g.P("switch key {")
 	for _, f := range m.Fields {
@@ -44,12 +47,12 @@ func decodeSingularCase(g *protogen.GeneratedFile, f *protogen.Field) {
 		return
 	}
 	if k == kindEnum {
-		g.P("case ", strconvQuote(f.Desc.JSONName()), ":")
+		emitFieldCaseHead(g, f)
 		emitDecEnum(g, f, "m."+f.GoName, isPointerField(f))
 		return
 	}
 	if k == kindMessage {
-		g.P("case ", strconvQuote(f.Desc.JSONName()), ":")
+		emitFieldCaseHead(g, f)
 		g.P("if d.Next() == ", g.QualifiedGoIdent(jxPkg.Ident("Null")), " { return d.Null() }")
 		g.P("m.", f.GoName, " = &", f.Message.GoIdent, "{}")
 		if w := wktName(f); w != "" {
@@ -59,7 +62,7 @@ func decodeSingularCase(g *protogen.GeneratedFile, f *protogen.Field) {
 		}
 		return
 	}
-	g.P("case ", strconvQuote(f.Desc.JSONName()), ":")
+	emitFieldCaseHead(g, f)
 	g.P("if d.Next() == ", g.QualifiedGoIdent(jxPkg.Ident("Null")), " {")
 	g.P("return d.Null()")
 	g.P("}")
@@ -90,7 +93,7 @@ func decodeListCase(g *protogen.GeneratedFile, f *protogen.Field) {
 		return
 	}
 	if k == kindEnum {
-		g.P("case ", strconvQuote(f.Desc.JSONName()), ":")
+		emitFieldCaseHead(g, f)
 		g.P("if d.Next() == ", g.QualifiedGoIdent(jxPkg.Ident("Null")), " { return d.Null() }")
 		g.P("return d.Arr(func(d *", g.QualifiedGoIdent(jxPkg.Ident("Decoder")), ") error {")
 		emitDecEnumElem(g, f)
@@ -98,7 +101,7 @@ func decodeListCase(g *protogen.GeneratedFile, f *protogen.Field) {
 		return
 	}
 	if k == kindMessage {
-		g.P("case ", strconvQuote(f.Desc.JSONName()), ":")
+		emitFieldCaseHead(g, f)
 		g.P("if d.Next() == ", g.QualifiedGoIdent(jxPkg.Ident("Null")), " { return d.Null() }")
 		g.P("return d.Arr(func(d *", g.QualifiedGoIdent(jxPkg.Ident("Decoder")), ") error {")
 		g.P("el := &", f.Message.GoIdent, "{}")
@@ -108,7 +111,7 @@ func decodeListCase(g *protogen.GeneratedFile, f *protogen.Field) {
 		g.P("})")
 		return
 	}
-	g.P("case ", strconvQuote(f.Desc.JSONName()), ":")
+	emitFieldCaseHead(g, f)
 	g.P("if d.Next() == ", g.QualifiedGoIdent(jxPkg.Ident("Null")), " { return d.Null() }")
 	g.P("return d.Arr(func(d *", g.QualifiedGoIdent(jxPkg.Ident("Decoder")), ") error {")
 	dec, _ := decScalarExpr(g, f)
@@ -150,6 +153,34 @@ func errorf(g *protogen.GeneratedFile) protogen.GoIdent {
 	return protogen.GoIdent{GoName: "Errorf", GoImportPath: "fmt"}
 }
 
+// decodeHasCases reports whether Decode emits at least one case (and thus needs
+// the `seen` map for duplicate detection).
+func decodeHasCases(m *protogen.Message) bool {
+	for _, f := range m.Fields {
+		if classify(f.Desc) != kindOther {
+			return true
+		}
+	}
+	return false
+}
+
+// emitFieldCaseHead emits the `case` label(s) for a normal field plus a guard
+// rejecting a duplicate occurrence of the same field (protojson errors on dups).
+func emitFieldCaseHead(g *protogen.GeneratedFile, f *protogen.Field) {
+	g.P("case ", caseLabels(f), ":")
+	g.P("if seen[", strconvQuote(f.GoName), "] { return ", errorf(g), `("duplicate field %q", key) }`)
+	g.P("seen[", strconvQuote(f.GoName), "] = true")
+}
+
+// emitOneofCaseHead emits the `case` label(s) for a oneof member plus a guard
+// rejecting a second key for the same oneof.
+func emitOneofCaseHead(g *protogen.GeneratedFile, oo *protogen.Oneof, f *protogen.Field) {
+	g.P("case ", caseLabels(f), ":")
+	key := "oneof:" + oo.GoName
+	g.P("if seen[", strconvQuote(key), "] { return ", errorf(g), "(", strconvQuote("multiple keys for oneof "+string(oo.Desc.Name())), ") }")
+	g.P("seen[", strconvQuote(key), "] = true")
+}
+
 // emitDecEnum reads an enum from a string name or number into target (a Go
 // lvalue). ptr means the target is a *Enum (proto3 optional).
 func emitDecEnum(g *protogen.GeneratedFile, f *protogen.Field, target string, ptr bool) {
@@ -186,7 +217,7 @@ func assignEnum(g *protogen.GeneratedFile, enumGo protogen.GoIdent, target, nExp
 
 // decodeOneofCase reads one oneof member and assigns the wrapper struct.
 func decodeOneofCase(g *protogen.GeneratedFile, oo *protogen.Oneof, f *protogen.Field) {
-	g.P("case ", strconvQuote(f.Desc.JSONName()), ":")
+	emitOneofCaseHead(g, oo, f)
 	g.P("if d.Next() == ", g.QualifiedGoIdent(jxPkg.Ident("Null")), " { return d.Null() }")
 	switch classify(f.Desc) {
 	case kindMessage:

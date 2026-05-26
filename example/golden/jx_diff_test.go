@@ -96,6 +96,39 @@ func TestNegativeZeroEmitted(t *testing.T) {
 	}
 }
 
+// #1: decode accepts original proto (snake_case) field names, like protojson.
+func TestDecodeAcceptsProtoNames(t *testing.T) {
+	var m pb.ScalarTypes
+	if err := m.UnmarshalJSON([]byte(`{"field_int32":7,"field_string":"hi"}`)); err != nil {
+		t.Fatalf("decode snake_case: %v", err)
+	}
+	if m.FieldInt32 != 7 || m.FieldString != "hi" {
+		t.Fatalf("got %+v", &m)
+	}
+}
+
+// #2: duplicate field keys are rejected (incl. via a camel/snake alias of the
+// same field).
+func TestDecodeRejectsDuplicateField(t *testing.T) {
+	if err := (&pb.ScalarTypes{}).UnmarshalJSON([]byte(`{"fieldInt32":1,"fieldInt32":2}`)); err == nil {
+		t.Fatal("expected duplicate-field error")
+	}
+	if err := (&pb.ScalarTypes{}).UnmarshalJSON([]byte(`{"fieldInt32":1,"field_int32":2}`)); err == nil {
+		t.Fatal("expected duplicate-field error via alias")
+	}
+}
+
+// #3: two keys for the same oneof are rejected; a single member decodes fine.
+func TestDecodeRejectsOneofConflict(t *testing.T) {
+	if err := (&pb.OneofContainer{}).UnmarshalJSON([]byte(`{"choiceBool":true,"choiceInt32":5}`)); err == nil {
+		t.Fatal("expected oneof-conflict error")
+	}
+	var ok pb.OneofContainer
+	if err := ok.UnmarshalJSON([]byte(`{"choiceBool":true,"otherA":"x"}`)); err != nil {
+		t.Fatalf("distinct oneofs should decode: %v", err)
+	}
+}
+
 func jsonEqual(t *testing.T, a, b []byte) bool {
 	t.Helper()
 	var ua, ub any

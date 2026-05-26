@@ -88,9 +88,14 @@ func (m *ScalarTypes) Encode(e *jx.Encoder) {
 }
 
 func (m *ScalarTypes) Decode(d *jx.Decoder) error {
+	seen := map[string]bool{}
 	return d.Obj(func(d *jx.Decoder, key string) error {
 		switch key {
-		case "fieldDouble":
+		case "fieldDouble", "field_double":
+			if seen["FieldDouble"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldDouble"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -100,7 +105,11 @@ func (m *ScalarTypes) Decode(d *jx.Decoder) error {
 			}
 			m.FieldDouble = v
 			return nil
-		case "fieldFloat":
+		case "fieldFloat", "field_float":
+			if seen["FieldFloat"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldFloat"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -110,7 +119,11 @@ func (m *ScalarTypes) Decode(d *jx.Decoder) error {
 			}
 			m.FieldFloat = v
 			return nil
-		case "fieldInt32":
+		case "fieldInt32", "field_int32":
+			if seen["FieldInt32"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldInt32"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -120,7 +133,11 @@ func (m *ScalarTypes) Decode(d *jx.Decoder) error {
 			}
 			m.FieldInt32 = v
 			return nil
-		case "fieldInt64":
+		case "fieldInt64", "field_int64":
+			if seen["FieldInt64"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldInt64"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -130,7 +147,11 @@ func (m *ScalarTypes) Decode(d *jx.Decoder) error {
 			}
 			m.FieldInt64 = v
 			return nil
-		case "fieldUint32":
+		case "fieldUint32", "field_uint32":
+			if seen["FieldUint32"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldUint32"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -140,7 +161,11 @@ func (m *ScalarTypes) Decode(d *jx.Decoder) error {
 			}
 			m.FieldUint32 = v
 			return nil
-		case "fieldUint64":
+		case "fieldUint64", "field_uint64":
+			if seen["FieldUint64"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldUint64"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -150,7 +175,11 @@ func (m *ScalarTypes) Decode(d *jx.Decoder) error {
 			}
 			m.FieldUint64 = v
 			return nil
-		case "fieldSint32":
+		case "fieldSint32", "field_sint32":
+			if seen["FieldSint32"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldSint32"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -160,7 +189,11 @@ func (m *ScalarTypes) Decode(d *jx.Decoder) error {
 			}
 			m.FieldSint32 = v
 			return nil
-		case "fieldSint64":
+		case "fieldSint64", "field_sint64":
+			if seen["FieldSint64"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldSint64"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -170,7 +203,11 @@ func (m *ScalarTypes) Decode(d *jx.Decoder) error {
 			}
 			m.FieldSint64 = v
 			return nil
-		case "fieldFixed32":
+		case "fieldFixed32", "field_fixed32":
+			if seen["FieldFixed32"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldFixed32"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -180,7 +217,11 @@ func (m *ScalarTypes) Decode(d *jx.Decoder) error {
 			}
 			m.FieldFixed32 = v
 			return nil
-		case "fieldFixed64":
+		case "fieldFixed64", "field_fixed64":
+			if seen["FieldFixed64"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldFixed64"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -190,7 +231,11 @@ func (m *ScalarTypes) Decode(d *jx.Decoder) error {
 			}
 			m.FieldFixed64 = v
 			return nil
-		case "fieldSfixed32":
+		case "fieldSfixed32", "field_sfixed32":
+			if seen["FieldSfixed32"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldSfixed32"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -200,7 +245,11 @@ func (m *ScalarTypes) Decode(d *jx.Decoder) error {
 			}
 			m.FieldSfixed32 = v
 			return nil
-		case "fieldSfixed64":
+		case "fieldSfixed64", "field_sfixed64":
+			if seen["FieldSfixed64"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldSfixed64"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -210,7 +259,11 @@ func (m *ScalarTypes) Decode(d *jx.Decoder) error {
 			}
 			m.FieldSfixed64 = v
 			return nil
-		case "fieldBool":
+		case "fieldBool", "field_bool":
+			if seen["FieldBool"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldBool"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -220,7 +273,11 @@ func (m *ScalarTypes) Decode(d *jx.Decoder) error {
 			}
 			m.FieldBool = v
 			return nil
-		case "fieldString":
+		case "fieldString", "field_string":
+			if seen["FieldString"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldString"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -230,7 +287,11 @@ func (m *ScalarTypes) Decode(d *jx.Decoder) error {
 			}
 			m.FieldString = v
 			return nil
-		case "fieldBytes":
+		case "fieldBytes", "field_bytes":
+			if seen["FieldBytes"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldBytes"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -328,9 +389,14 @@ func (m *OptionalScalarTypes) Encode(e *jx.Encoder) {
 }
 
 func (m *OptionalScalarTypes) Decode(d *jx.Decoder) error {
+	seen := map[string]bool{}
 	return d.Obj(func(d *jx.Decoder, key string) error {
 		switch key {
-		case "fieldDouble":
+		case "fieldDouble", "field_double":
+			if seen["FieldDouble"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldDouble"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -340,7 +406,11 @@ func (m *OptionalScalarTypes) Decode(d *jx.Decoder) error {
 			}
 			m.FieldDouble = &v
 			return nil
-		case "fieldFloat":
+		case "fieldFloat", "field_float":
+			if seen["FieldFloat"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldFloat"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -350,7 +420,11 @@ func (m *OptionalScalarTypes) Decode(d *jx.Decoder) error {
 			}
 			m.FieldFloat = &v
 			return nil
-		case "fieldInt32":
+		case "fieldInt32", "field_int32":
+			if seen["FieldInt32"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldInt32"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -360,7 +434,11 @@ func (m *OptionalScalarTypes) Decode(d *jx.Decoder) error {
 			}
 			m.FieldInt32 = &v
 			return nil
-		case "fieldInt64":
+		case "fieldInt64", "field_int64":
+			if seen["FieldInt64"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldInt64"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -370,7 +448,11 @@ func (m *OptionalScalarTypes) Decode(d *jx.Decoder) error {
 			}
 			m.FieldInt64 = &v
 			return nil
-		case "fieldUint32":
+		case "fieldUint32", "field_uint32":
+			if seen["FieldUint32"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldUint32"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -380,7 +462,11 @@ func (m *OptionalScalarTypes) Decode(d *jx.Decoder) error {
 			}
 			m.FieldUint32 = &v
 			return nil
-		case "fieldUint64":
+		case "fieldUint64", "field_uint64":
+			if seen["FieldUint64"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldUint64"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -390,7 +476,11 @@ func (m *OptionalScalarTypes) Decode(d *jx.Decoder) error {
 			}
 			m.FieldUint64 = &v
 			return nil
-		case "fieldSint32":
+		case "fieldSint32", "field_sint32":
+			if seen["FieldSint32"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldSint32"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -400,7 +490,11 @@ func (m *OptionalScalarTypes) Decode(d *jx.Decoder) error {
 			}
 			m.FieldSint32 = &v
 			return nil
-		case "fieldSint64":
+		case "fieldSint64", "field_sint64":
+			if seen["FieldSint64"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldSint64"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -410,7 +504,11 @@ func (m *OptionalScalarTypes) Decode(d *jx.Decoder) error {
 			}
 			m.FieldSint64 = &v
 			return nil
-		case "fieldFixed32":
+		case "fieldFixed32", "field_fixed32":
+			if seen["FieldFixed32"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldFixed32"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -420,7 +518,11 @@ func (m *OptionalScalarTypes) Decode(d *jx.Decoder) error {
 			}
 			m.FieldFixed32 = &v
 			return nil
-		case "fieldFixed64":
+		case "fieldFixed64", "field_fixed64":
+			if seen["FieldFixed64"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldFixed64"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -430,7 +532,11 @@ func (m *OptionalScalarTypes) Decode(d *jx.Decoder) error {
 			}
 			m.FieldFixed64 = &v
 			return nil
-		case "fieldSfixed32":
+		case "fieldSfixed32", "field_sfixed32":
+			if seen["FieldSfixed32"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldSfixed32"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -440,7 +546,11 @@ func (m *OptionalScalarTypes) Decode(d *jx.Decoder) error {
 			}
 			m.FieldSfixed32 = &v
 			return nil
-		case "fieldSfixed64":
+		case "fieldSfixed64", "field_sfixed64":
+			if seen["FieldSfixed64"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldSfixed64"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -450,7 +560,11 @@ func (m *OptionalScalarTypes) Decode(d *jx.Decoder) error {
 			}
 			m.FieldSfixed64 = &v
 			return nil
-		case "fieldBool":
+		case "fieldBool", "field_bool":
+			if seen["FieldBool"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldBool"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -460,7 +574,11 @@ func (m *OptionalScalarTypes) Decode(d *jx.Decoder) error {
 			}
 			m.FieldBool = &v
 			return nil
-		case "fieldString":
+		case "fieldString", "field_string":
+			if seen["FieldString"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldString"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -470,7 +588,11 @@ func (m *OptionalScalarTypes) Decode(d *jx.Decoder) error {
 			}
 			m.FieldString = &v
 			return nil
-		case "fieldBytes":
+		case "fieldBytes", "field_bytes":
+			if seen["FieldBytes"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldBytes"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -628,9 +750,14 @@ func (m *RepeatedScalarTypes) Encode(e *jx.Encoder) {
 }
 
 func (m *RepeatedScalarTypes) Decode(d *jx.Decoder) error {
+	seen := map[string]bool{}
 	return d.Obj(func(d *jx.Decoder, key string) error {
 		switch key {
-		case "fieldDouble":
+		case "fieldDouble", "field_double":
+			if seen["FieldDouble"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldDouble"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -642,7 +769,11 @@ func (m *RepeatedScalarTypes) Decode(d *jx.Decoder) error {
 				m.FieldDouble = append(m.FieldDouble, v)
 				return nil
 			})
-		case "fieldFloat":
+		case "fieldFloat", "field_float":
+			if seen["FieldFloat"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldFloat"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -654,7 +785,11 @@ func (m *RepeatedScalarTypes) Decode(d *jx.Decoder) error {
 				m.FieldFloat = append(m.FieldFloat, v)
 				return nil
 			})
-		case "fieldInt32":
+		case "fieldInt32", "field_int32":
+			if seen["FieldInt32"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldInt32"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -666,7 +801,11 @@ func (m *RepeatedScalarTypes) Decode(d *jx.Decoder) error {
 				m.FieldInt32 = append(m.FieldInt32, v)
 				return nil
 			})
-		case "fieldInt64":
+		case "fieldInt64", "field_int64":
+			if seen["FieldInt64"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldInt64"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -678,7 +817,11 @@ func (m *RepeatedScalarTypes) Decode(d *jx.Decoder) error {
 				m.FieldInt64 = append(m.FieldInt64, v)
 				return nil
 			})
-		case "fieldUint32":
+		case "fieldUint32", "field_uint32":
+			if seen["FieldUint32"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldUint32"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -690,7 +833,11 @@ func (m *RepeatedScalarTypes) Decode(d *jx.Decoder) error {
 				m.FieldUint32 = append(m.FieldUint32, v)
 				return nil
 			})
-		case "fieldUint64":
+		case "fieldUint64", "field_uint64":
+			if seen["FieldUint64"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldUint64"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -702,7 +849,11 @@ func (m *RepeatedScalarTypes) Decode(d *jx.Decoder) error {
 				m.FieldUint64 = append(m.FieldUint64, v)
 				return nil
 			})
-		case "fieldSint32":
+		case "fieldSint32", "field_sint32":
+			if seen["FieldSint32"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldSint32"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -714,7 +865,11 @@ func (m *RepeatedScalarTypes) Decode(d *jx.Decoder) error {
 				m.FieldSint32 = append(m.FieldSint32, v)
 				return nil
 			})
-		case "fieldSint64":
+		case "fieldSint64", "field_sint64":
+			if seen["FieldSint64"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldSint64"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -726,7 +881,11 @@ func (m *RepeatedScalarTypes) Decode(d *jx.Decoder) error {
 				m.FieldSint64 = append(m.FieldSint64, v)
 				return nil
 			})
-		case "fieldFixed32":
+		case "fieldFixed32", "field_fixed32":
+			if seen["FieldFixed32"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldFixed32"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -738,7 +897,11 @@ func (m *RepeatedScalarTypes) Decode(d *jx.Decoder) error {
 				m.FieldFixed32 = append(m.FieldFixed32, v)
 				return nil
 			})
-		case "fieldFixed64":
+		case "fieldFixed64", "field_fixed64":
+			if seen["FieldFixed64"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldFixed64"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -750,7 +913,11 @@ func (m *RepeatedScalarTypes) Decode(d *jx.Decoder) error {
 				m.FieldFixed64 = append(m.FieldFixed64, v)
 				return nil
 			})
-		case "fieldSfixed32":
+		case "fieldSfixed32", "field_sfixed32":
+			if seen["FieldSfixed32"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldSfixed32"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -762,7 +929,11 @@ func (m *RepeatedScalarTypes) Decode(d *jx.Decoder) error {
 				m.FieldSfixed32 = append(m.FieldSfixed32, v)
 				return nil
 			})
-		case "fieldSfixed64":
+		case "fieldSfixed64", "field_sfixed64":
+			if seen["FieldSfixed64"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldSfixed64"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -774,7 +945,11 @@ func (m *RepeatedScalarTypes) Decode(d *jx.Decoder) error {
 				m.FieldSfixed64 = append(m.FieldSfixed64, v)
 				return nil
 			})
-		case "fieldBool":
+		case "fieldBool", "field_bool":
+			if seen["FieldBool"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldBool"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -786,7 +961,11 @@ func (m *RepeatedScalarTypes) Decode(d *jx.Decoder) error {
 				m.FieldBool = append(m.FieldBool, v)
 				return nil
 			})
-		case "fieldString":
+		case "fieldString", "field_string":
+			if seen["FieldString"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldString"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -798,7 +977,11 @@ func (m *RepeatedScalarTypes) Decode(d *jx.Decoder) error {
 				m.FieldString = append(m.FieldString, v)
 				return nil
 			})
-		case "fieldBytes":
+		case "fieldBytes", "field_bytes":
+			if seen["FieldBytes"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldBytes"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -854,15 +1037,24 @@ func (m *Outer) Encode(e *jx.Encoder) {
 }
 
 func (m *Outer) Decode(d *jx.Decoder) error {
+	seen := map[string]bool{}
 	return d.Obj(func(d *jx.Decoder, key string) error {
 		switch key {
 		case "inner":
+			if seen["Inner"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["Inner"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
 			m.Inner = &Outer_Inner{}
 			return m.Inner.Decode(d)
-		case "enumField":
+		case "enumField", "enum_field":
+			if seen["EnumField"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["EnumField"] = true
 			switch d.Next() {
 			case jx.String:
 				s, err := d.Str()
@@ -887,7 +1079,11 @@ func (m *Outer) Decode(d *jx.Decoder) error {
 			default:
 				return fmt.Errorf("invalid enum token %s", d.Next())
 			}
-		case "deepInner":
+		case "deepInner", "deep_inner":
+			if seen["DeepInner"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["DeepInner"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -933,9 +1129,14 @@ func (m *Outer_Inner) Encode(e *jx.Encoder) {
 }
 
 func (m *Outer_Inner) Decode(d *jx.Decoder) error {
+	seen := map[string]bool{}
 	return d.Obj(func(d *jx.Decoder, key string) error {
 		switch key {
-		case "nestedEnum":
+		case "nestedEnum", "nested_enum":
+			if seen["NestedEnum"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["NestedEnum"] = true
 			switch d.Next() {
 			case jx.String:
 				s, err := d.Str()
@@ -961,6 +1162,10 @@ func (m *Outer_Inner) Decode(d *jx.Decoder) error {
 				return fmt.Errorf("invalid enum token %s", d.Next())
 			}
 		case "deep":
+			if seen["Deep"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["Deep"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -998,9 +1203,14 @@ func (m *Outer_Inner_DeepInner) Encode(e *jx.Encoder) {
 }
 
 func (m *Outer_Inner_DeepInner) Decode(d *jx.Decoder) error {
+	seen := map[string]bool{}
 	return d.Obj(func(d *jx.Decoder, key string) error {
 		switch key {
 		case "value":
+			if seen["Value"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["Value"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -1094,9 +1304,14 @@ func (m *EnumAndMessageFields) Encode(e *jx.Encoder) {
 }
 
 func (m *EnumAndMessageFields) Decode(d *jx.Decoder) error {
+	seen := map[string]bool{}
 	return d.Obj(func(d *jx.Decoder, key string) error {
 		switch key {
-		case "singularEnum":
+		case "singularEnum", "singular_enum":
+			if seen["SingularEnum"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["SingularEnum"] = true
 			switch d.Next() {
 			case jx.String:
 				s, err := d.Str()
@@ -1121,7 +1336,11 @@ func (m *EnumAndMessageFields) Decode(d *jx.Decoder) error {
 			default:
 				return fmt.Errorf("invalid enum token %s", d.Next())
 			}
-		case "optionalEnum":
+		case "optionalEnum", "optional_enum":
+			if seen["OptionalEnum"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["OptionalEnum"] = true
 			switch d.Next() {
 			case jx.String:
 				s, err := d.Str()
@@ -1148,7 +1367,11 @@ func (m *EnumAndMessageFields) Decode(d *jx.Decoder) error {
 			default:
 				return fmt.Errorf("invalid enum token %s", d.Next())
 			}
-		case "repeatedEnum":
+		case "repeatedEnum", "repeated_enum":
+			if seen["RepeatedEnum"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["RepeatedEnum"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -1175,19 +1398,31 @@ func (m *EnumAndMessageFields) Decode(d *jx.Decoder) error {
 				m.RepeatedEnum = append(m.RepeatedEnum, TopLevelEnum(n))
 				return nil
 			})
-		case "singularMessage":
+		case "singularMessage", "singular_message":
+			if seen["SingularMessage"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["SingularMessage"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
 			m.SingularMessage = &ScalarTypes{}
 			return m.SingularMessage.Decode(d)
-		case "optionalMessage":
+		case "optionalMessage", "optional_message":
+			if seen["OptionalMessage"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["OptionalMessage"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
 			m.OptionalMessage = &ScalarTypes{}
 			return m.OptionalMessage.Decode(d)
-		case "repeatedMessage":
+		case "repeatedMessage", "repeated_message":
+			if seen["RepeatedMessage"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["RepeatedMessage"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -1199,7 +1434,11 @@ func (m *EnumAndMessageFields) Decode(d *jx.Decoder) error {
 				m.RepeatedMessage = append(m.RepeatedMessage, el)
 				return nil
 			})
-		case "nestedEnum":
+		case "nestedEnum", "nested_enum":
+			if seen["NestedEnum"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["NestedEnum"] = true
 			switch d.Next() {
 			case jx.String:
 				s, err := d.Str()
@@ -1224,7 +1463,11 @@ func (m *EnumAndMessageFields) Decode(d *jx.Decoder) error {
 			default:
 				return fmt.Errorf("invalid enum token %s", d.Next())
 			}
-		case "nestedMessage":
+		case "nestedMessage", "nested_message":
+			if seen["NestedMessage"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["NestedMessage"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -1366,9 +1609,14 @@ func (m *MapKeyTypes) Encode(e *jx.Encoder) {
 }
 
 func (m *MapKeyTypes) Decode(d *jx.Decoder) error {
+	seen := map[string]bool{}
 	return d.Obj(func(d *jx.Decoder, key string) error {
 		switch key {
-		case "int32Key":
+		case "int32Key", "int32_key":
+			if seen["Int32Key"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["Int32Key"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -1390,7 +1638,11 @@ func (m *MapKeyTypes) Decode(d *jx.Decoder) error {
 				m.Int32Key[mk] = mv
 				return nil
 			})
-		case "int64Key":
+		case "int64Key", "int64_key":
+			if seen["Int64Key"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["Int64Key"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -1411,7 +1663,11 @@ func (m *MapKeyTypes) Decode(d *jx.Decoder) error {
 				m.Int64Key[mk] = mv
 				return nil
 			})
-		case "uint32Key":
+		case "uint32Key", "uint32_key":
+			if seen["Uint32Key"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["Uint32Key"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -1433,7 +1689,11 @@ func (m *MapKeyTypes) Decode(d *jx.Decoder) error {
 				m.Uint32Key[mk] = mv
 				return nil
 			})
-		case "uint64Key":
+		case "uint64Key", "uint64_key":
+			if seen["Uint64Key"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["Uint64Key"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -1454,7 +1714,11 @@ func (m *MapKeyTypes) Decode(d *jx.Decoder) error {
 				m.Uint64Key[mk] = mv
 				return nil
 			})
-		case "sint32Key":
+		case "sint32Key", "sint32_key":
+			if seen["Sint32Key"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["Sint32Key"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -1476,7 +1740,11 @@ func (m *MapKeyTypes) Decode(d *jx.Decoder) error {
 				m.Sint32Key[mk] = mv
 				return nil
 			})
-		case "sint64Key":
+		case "sint64Key", "sint64_key":
+			if seen["Sint64Key"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["Sint64Key"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -1497,7 +1765,11 @@ func (m *MapKeyTypes) Decode(d *jx.Decoder) error {
 				m.Sint64Key[mk] = mv
 				return nil
 			})
-		case "fixed32Key":
+		case "fixed32Key", "fixed32_key":
+			if seen["Fixed32Key"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["Fixed32Key"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -1519,7 +1791,11 @@ func (m *MapKeyTypes) Decode(d *jx.Decoder) error {
 				m.Fixed32Key[mk] = mv
 				return nil
 			})
-		case "fixed64Key":
+		case "fixed64Key", "fixed64_key":
+			if seen["Fixed64Key"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["Fixed64Key"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -1540,7 +1816,11 @@ func (m *MapKeyTypes) Decode(d *jx.Decoder) error {
 				m.Fixed64Key[mk] = mv
 				return nil
 			})
-		case "sfixed32Key":
+		case "sfixed32Key", "sfixed32_key":
+			if seen["Sfixed32Key"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["Sfixed32Key"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -1562,7 +1842,11 @@ func (m *MapKeyTypes) Decode(d *jx.Decoder) error {
 				m.Sfixed32Key[mk] = mv
 				return nil
 			})
-		case "sfixed64Key":
+		case "sfixed64Key", "sfixed64_key":
+			if seen["Sfixed64Key"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["Sfixed64Key"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -1583,7 +1867,11 @@ func (m *MapKeyTypes) Decode(d *jx.Decoder) error {
 				m.Sfixed64Key[mk] = mv
 				return nil
 			})
-		case "boolKey":
+		case "boolKey", "bool_key":
+			if seen["BoolKey"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["BoolKey"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -1604,7 +1892,11 @@ func (m *MapKeyTypes) Decode(d *jx.Decoder) error {
 				m.BoolKey[mk] = mv
 				return nil
 			})
-		case "stringKey":
+		case "stringKey", "string_key":
+			if seen["StringKey"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["StringKey"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -1753,9 +2045,14 @@ func (m *MapValueTypes) Encode(e *jx.Encoder) {
 }
 
 func (m *MapValueTypes) Decode(d *jx.Decoder) error {
+	seen := map[string]bool{}
 	return d.Obj(func(d *jx.Decoder, key string) error {
 		switch key {
-		case "doubleValue":
+		case "doubleValue", "double_value":
+			if seen["DoubleValue"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["DoubleValue"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -1773,7 +2070,11 @@ func (m *MapValueTypes) Decode(d *jx.Decoder) error {
 				m.DoubleValue[mk] = mv
 				return nil
 			})
-		case "floatValue":
+		case "floatValue", "float_value":
+			if seen["FloatValue"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FloatValue"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -1791,7 +2092,11 @@ func (m *MapValueTypes) Decode(d *jx.Decoder) error {
 				m.FloatValue[mk] = mv
 				return nil
 			})
-		case "int32Value":
+		case "int32Value", "int32_value":
+			if seen["Int32Value"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["Int32Value"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -1809,7 +2114,11 @@ func (m *MapValueTypes) Decode(d *jx.Decoder) error {
 				m.Int32Value[mk] = mv
 				return nil
 			})
-		case "int64Value":
+		case "int64Value", "int64_value":
+			if seen["Int64Value"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["Int64Value"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -1827,7 +2136,11 @@ func (m *MapValueTypes) Decode(d *jx.Decoder) error {
 				m.Int64Value[mk] = mv
 				return nil
 			})
-		case "uint32Value":
+		case "uint32Value", "uint32_value":
+			if seen["Uint32Value"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["Uint32Value"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -1845,7 +2158,11 @@ func (m *MapValueTypes) Decode(d *jx.Decoder) error {
 				m.Uint32Value[mk] = mv
 				return nil
 			})
-		case "uint64Value":
+		case "uint64Value", "uint64_value":
+			if seen["Uint64Value"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["Uint64Value"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -1863,7 +2180,11 @@ func (m *MapValueTypes) Decode(d *jx.Decoder) error {
 				m.Uint64Value[mk] = mv
 				return nil
 			})
-		case "boolValue":
+		case "boolValue", "bool_value":
+			if seen["BoolValue"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["BoolValue"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -1881,7 +2202,11 @@ func (m *MapValueTypes) Decode(d *jx.Decoder) error {
 				m.BoolValue[mk] = mv
 				return nil
 			})
-		case "stringValue":
+		case "stringValue", "string_value":
+			if seen["StringValue"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["StringValue"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -1899,7 +2224,11 @@ func (m *MapValueTypes) Decode(d *jx.Decoder) error {
 				m.StringValue[mk] = mv
 				return nil
 			})
-		case "bytesValue":
+		case "bytesValue", "bytes_value":
+			if seen["BytesValue"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["BytesValue"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -1917,7 +2246,11 @@ func (m *MapValueTypes) Decode(d *jx.Decoder) error {
 				m.BytesValue[mk] = mv
 				return nil
 			})
-		case "enumValue":
+		case "enumValue", "enum_value":
+			if seen["EnumValue"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["EnumValue"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -1948,7 +2281,11 @@ func (m *MapValueTypes) Decode(d *jx.Decoder) error {
 				m.EnumValue[mk] = mv
 				return nil
 			})
-		case "messageValue":
+		case "messageValue", "message_value":
+			if seen["MessageValue"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["MessageValue"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -2032,9 +2369,14 @@ func (m *OneofContainer) Encode(e *jx.Encoder) {
 }
 
 func (m *OneofContainer) Decode(d *jx.Decoder) error {
+	seen := map[string]bool{}
 	return d.Obj(func(d *jx.Decoder, key string) error {
 		switch key {
-		case "outsideOneof":
+		case "outsideOneof", "outside_oneof":
+			if seen["OutsideOneof"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["OutsideOneof"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -2044,7 +2386,11 @@ func (m *OneofContainer) Decode(d *jx.Decoder) error {
 			}
 			m.OutsideOneof = v
 			return nil
-		case "choiceDouble":
+		case "choiceDouble", "choice_double":
+			if seen["oneof:Choice"] {
+				return fmt.Errorf("multiple keys for oneof choice")
+			}
+			seen["oneof:Choice"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -2054,7 +2400,11 @@ func (m *OneofContainer) Decode(d *jx.Decoder) error {
 			}
 			m.Choice = &OneofContainer_ChoiceDouble{ChoiceDouble: val}
 			return nil
-		case "choiceInt32":
+		case "choiceInt32", "choice_int32":
+			if seen["oneof:Choice"] {
+				return fmt.Errorf("multiple keys for oneof choice")
+			}
+			seen["oneof:Choice"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -2064,7 +2414,11 @@ func (m *OneofContainer) Decode(d *jx.Decoder) error {
 			}
 			m.Choice = &OneofContainer_ChoiceInt32{ChoiceInt32: val}
 			return nil
-		case "choiceBool":
+		case "choiceBool", "choice_bool":
+			if seen["oneof:Choice"] {
+				return fmt.Errorf("multiple keys for oneof choice")
+			}
+			seen["oneof:Choice"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -2074,7 +2428,11 @@ func (m *OneofContainer) Decode(d *jx.Decoder) error {
 			}
 			m.Choice = &OneofContainer_ChoiceBool{ChoiceBool: val}
 			return nil
-		case "choiceString":
+		case "choiceString", "choice_string":
+			if seen["oneof:Choice"] {
+				return fmt.Errorf("multiple keys for oneof choice")
+			}
+			seen["oneof:Choice"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -2084,7 +2442,11 @@ func (m *OneofContainer) Decode(d *jx.Decoder) error {
 			}
 			m.Choice = &OneofContainer_ChoiceString{ChoiceString: val}
 			return nil
-		case "choiceBytes":
+		case "choiceBytes", "choice_bytes":
+			if seen["oneof:Choice"] {
+				return fmt.Errorf("multiple keys for oneof choice")
+			}
+			seen["oneof:Choice"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -2094,7 +2456,11 @@ func (m *OneofContainer) Decode(d *jx.Decoder) error {
 			}
 			m.Choice = &OneofContainer_ChoiceBytes{ChoiceBytes: val}
 			return nil
-		case "choiceEnum":
+		case "choiceEnum", "choice_enum":
+			if seen["oneof:Choice"] {
+				return fmt.Errorf("multiple keys for oneof choice")
+			}
+			seen["oneof:Choice"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -2119,7 +2485,11 @@ func (m *OneofContainer) Decode(d *jx.Decoder) error {
 			}
 			m.Choice = w
 			return nil
-		case "choiceMessage":
+		case "choiceMessage", "choice_message":
+			if seen["oneof:Choice"] {
+				return fmt.Errorf("multiple keys for oneof choice")
+			}
+			seen["oneof:Choice"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -2130,7 +2500,11 @@ func (m *OneofContainer) Decode(d *jx.Decoder) error {
 			}
 			m.Choice = w
 			return nil
-		case "otherA":
+		case "otherA", "other_a":
+			if seen["oneof:Other"] {
+				return fmt.Errorf("multiple keys for oneof other")
+			}
+			seen["oneof:Other"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -2140,7 +2514,11 @@ func (m *OneofContainer) Decode(d *jx.Decoder) error {
 			}
 			m.Other = &OneofContainer_OtherA{OtherA: val}
 			return nil
-		case "otherB":
+		case "otherB", "other_b":
+			if seen["oneof:Other"] {
+				return fmt.Errorf("multiple keys for oneof other")
+			}
+			seen["oneof:Other"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -2263,111 +2641,184 @@ func (m *WellKnownTypes) Encode(e *jx.Encoder) {
 }
 
 func (m *WellKnownTypes) Decode(d *jx.Decoder) error {
+	seen := map[string]bool{}
 	return d.Obj(func(d *jx.Decoder, key string) error {
 		switch key {
 		case "timestamp":
+			if seen["Timestamp"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["Timestamp"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
 			m.Timestamp = &timestamppb.Timestamp{}
 			return jxpb.DecTimestamp(d, m.Timestamp)
 		case "duration":
+			if seen["Duration"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["Duration"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
 			m.Duration = &durationpb.Duration{}
 			return jxpb.DecDuration(d, m.Duration)
 		case "any":
+			if seen["Any"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["Any"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
 			m.Any = &anypb.Any{}
 			return jxpb.DecAny(d, m.Any)
 		case "empty":
+			if seen["Empty"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["Empty"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
 			m.Empty = &emptypb.Empty{}
 			return jxpb.DecEmpty(d, m.Empty)
-		case "fieldMask":
+		case "fieldMask", "field_mask":
+			if seen["FieldMask"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FieldMask"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
 			m.FieldMask = &fieldmaskpb.FieldMask{}
 			return jxpb.DecFieldMask(d, m.FieldMask)
 		case "struct":
+			if seen["Struct"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["Struct"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
 			m.Struct = &structpb.Struct{}
 			return jxpb.DecStruct(d, m.Struct)
 		case "value":
+			if seen["Value"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["Value"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
 			m.Value = &structpb.Value{}
 			return jxpb.DecValue(d, m.Value)
-		case "listValue":
+		case "listValue", "list_value":
+			if seen["ListValue"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["ListValue"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
 			m.ListValue = &structpb.ListValue{}
 			return jxpb.DecListValue(d, m.ListValue)
-		case "doubleWrapper":
+		case "doubleWrapper", "double_wrapper":
+			if seen["DoubleWrapper"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["DoubleWrapper"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
 			m.DoubleWrapper = &wrapperspb.DoubleValue{}
 			return jxpb.DecDoubleValue(d, m.DoubleWrapper)
-		case "floatWrapper":
+		case "floatWrapper", "float_wrapper":
+			if seen["FloatWrapper"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["FloatWrapper"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
 			m.FloatWrapper = &wrapperspb.FloatValue{}
 			return jxpb.DecFloatValue(d, m.FloatWrapper)
-		case "int32Wrapper":
+		case "int32Wrapper", "int32_wrapper":
+			if seen["Int32Wrapper"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["Int32Wrapper"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
 			m.Int32Wrapper = &wrapperspb.Int32Value{}
 			return jxpb.DecInt32Value(d, m.Int32Wrapper)
-		case "int64Wrapper":
+		case "int64Wrapper", "int64_wrapper":
+			if seen["Int64Wrapper"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["Int64Wrapper"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
 			m.Int64Wrapper = &wrapperspb.Int64Value{}
 			return jxpb.DecInt64Value(d, m.Int64Wrapper)
-		case "uint32Wrapper":
+		case "uint32Wrapper", "uint32_wrapper":
+			if seen["Uint32Wrapper"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["Uint32Wrapper"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
 			m.Uint32Wrapper = &wrapperspb.UInt32Value{}
 			return jxpb.DecUint32Value(d, m.Uint32Wrapper)
-		case "uint64Wrapper":
+		case "uint64Wrapper", "uint64_wrapper":
+			if seen["Uint64Wrapper"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["Uint64Wrapper"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
 			m.Uint64Wrapper = &wrapperspb.UInt64Value{}
 			return jxpb.DecUint64Value(d, m.Uint64Wrapper)
-		case "boolWrapper":
+		case "boolWrapper", "bool_wrapper":
+			if seen["BoolWrapper"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["BoolWrapper"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
 			m.BoolWrapper = &wrapperspb.BoolValue{}
 			return jxpb.DecBoolValue(d, m.BoolWrapper)
-		case "stringWrapper":
+		case "stringWrapper", "string_wrapper":
+			if seen["StringWrapper"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["StringWrapper"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
 			m.StringWrapper = &wrapperspb.StringValue{}
 			return jxpb.DecStringValue(d, m.StringWrapper)
-		case "bytesWrapper":
+		case "bytesWrapper", "bytes_wrapper":
+			if seen["BytesWrapper"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["BytesWrapper"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
 			m.BytesWrapper = &wrapperspb.BytesValue{}
 			return jxpb.DecBytesValue(d, m.BytesWrapper)
-		case "repeatedTimestamp":
+		case "repeatedTimestamp", "repeated_timestamp":
+			if seen["RepeatedTimestamp"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["RepeatedTimestamp"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -2379,7 +2830,11 @@ func (m *WellKnownTypes) Decode(d *jx.Decoder) error {
 				m.RepeatedTimestamp = append(m.RepeatedTimestamp, el)
 				return nil
 			})
-		case "mapDuration":
+		case "mapDuration", "map_duration":
+			if seen["MapDuration"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["MapDuration"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -2449,9 +2904,14 @@ func (m *TreeNode) Encode(e *jx.Encoder) {
 }
 
 func (m *TreeNode) Decode(d *jx.Decoder) error {
+	seen := map[string]bool{}
 	return d.Obj(func(d *jx.Decoder, key string) error {
 		switch key {
 		case "id":
+			if seen["Id"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["Id"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -2462,12 +2922,20 @@ func (m *TreeNode) Decode(d *jx.Decoder) error {
 			m.Id = v
 			return nil
 		case "parent":
+			if seen["Parent"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["Parent"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
 			m.Parent = &TreeNode{}
 			return m.Parent.Decode(d)
 		case "children":
+			if seen["Children"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["Children"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -2480,6 +2948,10 @@ func (m *TreeNode) Decode(d *jx.Decoder) error {
 				return nil
 			})
 		case "named":
+			if seen["Named"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["Named"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -2528,9 +3000,14 @@ func (m *MutualA) Encode(e *jx.Encoder) {
 }
 
 func (m *MutualA) Decode(d *jx.Decoder) error {
+	seen := map[string]bool{}
 	return d.Obj(func(d *jx.Decoder, key string) error {
 		switch key {
 		case "b":
+			if seen["B"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["B"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -2568,9 +3045,14 @@ func (m *MutualB) Encode(e *jx.Encoder) {
 }
 
 func (m *MutualB) Decode(d *jx.Decoder) error {
+	seen := map[string]bool{}
 	return d.Obj(func(d *jx.Decoder, key string) error {
 		switch key {
 		case "a":
+			if seen["A"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["A"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -2608,9 +3090,14 @@ func (m *Reserved) Encode(e *jx.Encoder) {
 }
 
 func (m *Reserved) Decode(d *jx.Decoder) error {
+	seen := map[string]bool{}
 	return d.Obj(func(d *jx.Decoder, key string) error {
 		switch key {
 		case "active":
+			if seen["Active"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["Active"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -2704,69 +3191,114 @@ func (m *Everything) Encode(e *jx.Encoder) {
 }
 
 func (m *Everything) Decode(d *jx.Decoder) error {
+	seen := map[string]bool{}
 	return d.Obj(func(d *jx.Decoder, key string) error {
 		switch key {
 		case "scalars":
+			if seen["Scalars"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["Scalars"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
 			m.Scalars = &ScalarTypes{}
 			return m.Scalars.Decode(d)
 		case "optionals":
+			if seen["Optionals"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["Optionals"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
 			m.Optionals = &OptionalScalarTypes{}
 			return m.Optionals.Decode(d)
 		case "repeateds":
+			if seen["Repeateds"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["Repeateds"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
 			m.Repeateds = &RepeatedScalarTypes{}
 			return m.Repeateds.Decode(d)
-		case "enumsAndMessages":
+		case "enumsAndMessages", "enums_and_messages":
+			if seen["EnumsAndMessages"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["EnumsAndMessages"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
 			m.EnumsAndMessages = &EnumAndMessageFields{}
 			return m.EnumsAndMessages.Decode(d)
-		case "mapKeys":
+		case "mapKeys", "map_keys":
+			if seen["MapKeys"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["MapKeys"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
 			m.MapKeys = &MapKeyTypes{}
 			return m.MapKeys.Decode(d)
-		case "mapValues":
+		case "mapValues", "map_values":
+			if seen["MapValues"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["MapValues"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
 			m.MapValues = &MapValueTypes{}
 			return m.MapValues.Decode(d)
 		case "oneof":
+			if seen["Oneof"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["Oneof"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
 			m.Oneof = &OneofContainer{}
 			return m.Oneof.Decode(d)
-		case "wellKnown":
+		case "wellKnown", "well_known":
+			if seen["WellKnown"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["WellKnown"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
 			m.WellKnown = &WellKnownTypes{}
 			return m.WellKnown.Decode(d)
 		case "tree":
+			if seen["Tree"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["Tree"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
 			m.Tree = &TreeNode{}
 			return m.Tree.Decode(d)
 		case "reserved":
+			if seen["Reserved"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["Reserved"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
 			m.Reserved = &Reserved{}
 			return m.Reserved.Decode(d)
 		case "recursive":
+			if seen["Recursive"] {
+				return fmt.Errorf("duplicate field %q", key)
+			}
+			seen["Recursive"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -2779,6 +3311,10 @@ func (m *Everything) Decode(d *jx.Decoder) error {
 				return nil
 			})
 		case "done":
+			if seen["oneof:Terminal"] {
+				return fmt.Errorf("multiple keys for oneof terminal")
+			}
+			seen["oneof:Terminal"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}
@@ -2789,6 +3325,10 @@ func (m *Everything) Decode(d *jx.Decoder) error {
 			m.Terminal = &Everything_Done{Done: val}
 			return nil
 		case "error":
+			if seen["oneof:Terminal"] {
+				return fmt.Errorf("multiple keys for oneof terminal")
+			}
+			seen["oneof:Terminal"] = true
 			if d.Next() == jx.Null {
 				return d.Null()
 			}

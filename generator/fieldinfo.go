@@ -55,6 +55,18 @@ func classify(fd protoreflect.FieldDescriptor) scalarKind {
 
 func strconvQuote(s string) string { return strconv.Quote(s) }
 
+// caseLabels returns the decode switch-case label(s) for a field: the JSON
+// (lowerCamel) name, plus the original proto name when it differs — protojson
+// accepts both on input.
+func caseLabels(f *protogen.Field) string {
+	j := strconvQuote(f.Desc.JSONName())
+	p := strconvQuote(string(f.Desc.Name()))
+	if j == p {
+		return j
+	}
+	return j + ", " + p
+}
+
 // zeroLit returns the zero-value literal used in the omit-default check.
 func zeroLit(f *protogen.Field) string {
 	switch classify(f.Desc) {
