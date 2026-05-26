@@ -93,6 +93,20 @@ func TestDurationNegative(t *testing.T) {
 	}
 }
 
+func TestDurationLargeRoundTrip(t *testing.T) {
+	// Near protojson's max Duration (~315576000000s), well past time.ParseDuration's range.
+	in := &durationpb.Duration{Seconds: 315576000000, Nanos: 1}
+	var e jx.Encoder
+	jxpb.EncDuration(&e, in)
+	out := &durationpb.Duration{}
+	if err := jxpb.DecDuration(jx.DecodeStr(string(e.Bytes())), out); err != nil {
+		t.Fatalf("DecDuration(%s): %v", e.Bytes(), err)
+	}
+	if out.Seconds != in.Seconds || out.Nanos != in.Nanos {
+		t.Fatalf("large duration round-trip: %v vs %v", out, in)
+	}
+}
+
 func TestTimestampNoFraction(t *testing.T) {
 	var e jx.Encoder
 	jxpb.EncTimestamp(&e, &timestamppb.Timestamp{Seconds: 0})

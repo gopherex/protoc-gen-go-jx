@@ -3,6 +3,7 @@ package jxpb
 import (
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/go-faster/jx"
@@ -84,12 +85,40 @@ func DecDuration(d *jx.Decoder, out *durationpb.Duration) error {
 	if len(s) == 0 || s[len(s)-1] != 's' {
 		return fmt.Errorf("invalid duration %q", s)
 	}
-	dur, err := time.ParseDuration(s)
-	if err != nil {
-		return err
+	// Parse "[-]<seconds>[.<frac>]s" manually: time.ParseDuration overflows
+	// above ~292 years, but protojson Duration spans ~10000 years.
+	body := s[:len(s)-1]
+	neg := false
+	if len(body) > 0 && (body[0] == '-' || body[0] == '+') {
+		neg = body[0] == '-'
+		body = body[1:]
 	}
-	out.Seconds = int64(dur / time.Second)
-	out.Nanos = int32(dur % time.Second)
+	secPart, fracPart := body, ""
+	if i := strings.IndexByte(body, '.'); i >= 0 {
+		secPart, fracPart = body[:i], body[i+1:]
+	}
+	sec, err := strconv.ParseInt(secPart, 10, 64)
+	if err != nil {
+		return fmt.Errorf("invalid duration %q: %w", s, err)
+	}
+	var nanos int32
+	if fracPart != "" {
+		if len(fracPart) > 9 {
+			return fmt.Errorf("invalid duration %q: too many fractional digits", s)
+		}
+		for len(fracPart) < 9 {
+			fracPart += "0"
+		}
+		n, err := strconv.ParseInt(fracPart, 10, 32)
+		if err != nil {
+			return fmt.Errorf("invalid duration %q: %w", s, err)
+		}
+		nanos = int32(n)
+	}
+	if neg {
+		sec, nanos = -sec, -nanos
+	}
+	out.Seconds, out.Nanos = sec, nanos
 	return nil
 }
 
@@ -231,7 +260,6 @@ func DecBytesValue(d *jx.Decoder, w *wrapperspb.BytesValue) error {
 func EncValue(e *jx.Encoder, v *structpb.Value) {
 	switch k := v.GetKind().(type) {
 	case *structpb.Value_NullValue:
-		_ = k
 		e.Null()
 	case *structpb.Value_NumberValue:
 		EncFloat64(e, k.NumberValue)
