@@ -56,6 +56,36 @@ Decoding matches protojson defaults too:
 Cross-package message fields are supported when that package is also
 `protoc-gen-go-jx`-generated.
 
+## Benchmarks
+
+Generated `jx` codecs vs `protojson` on the same messages
+(`go test -bench=. -benchmem ./example/golden/`, Go 1.26, Intel i5-14600K).
+`ScalarTypes` is a flat scalar message; `Everything` nests every feature
+(scalars, optionals, repeated, maps, oneof, all WKTs, recursion). Numbers vary
+by machine — run it yourself.
+
+**Marshal**
+
+| message | codec | ns/op | B/op | allocs/op | speedup |
+|---|---|--:|--:|--:|--:|
+| ScalarTypes | jx | 837 | 1104 | 14 | **2.3×** |
+| ScalarTypes | protojson | 1901 | 1474 | 26 | — |
+| Everything | jx | 49 193 | 66 810 | 244 | **3.2×** |
+| Everything | protojson | 158 605 | 122 210 | 1919 | — |
+
+**Unmarshal**
+
+| message | codec | ns/op | B/op | allocs/op | speedup |
+|---|---|--:|--:|--:|--:|
+| ScalarTypes | jx | 1760 | 1960 | 30 | **2.1×** |
+| ScalarTypes | protojson | 3749 | 984 | 63 | — |
+| Everything | jx | 106 720 | 101 880 | 1890 | **2.4×** |
+| Everything | protojson | 259 432 | 90 513 | 3643 | — |
+
+~2–3× faster with far fewer allocations (up to ~8× fewer on encode), since there
+is no per-call descriptor reflection. The benchmark is
+`example/golden/jx_bench_test.go`.
+
 ## Install
 
 ```bash
