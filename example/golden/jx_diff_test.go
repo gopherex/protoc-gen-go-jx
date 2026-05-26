@@ -2,6 +2,7 @@ package golden_test
 
 import (
 	"encoding/json"
+	"math"
 	"reflect"
 	"testing"
 	"time"
@@ -75,6 +76,23 @@ func TestDiffAgainstProtojson(t *testing.T) {
 				t.Fatalf("round-trip mismatch:\n in:  %v\n out: %v", msg, dec)
 			}
 		})
+	}
+}
+
+// TestNegativeZeroEmitted: protojson keeps -0.0 (distinct from default 0), so we
+// must emit it too. jsonEqual catches omission (want has the key, ours wouldn't).
+func TestNegativeZeroEmitted(t *testing.T) {
+	m := &pb.ScalarTypes{FieldDouble: math.Copysign(0, -1), FieldFloat: float32(math.Copysign(0, -1))}
+	ours, err := m.MarshalJSON()
+	if err != nil {
+		t.Fatalf("MarshalJSON: %v", err)
+	}
+	want, err := protojson.Marshal(m)
+	if err != nil {
+		t.Fatalf("protojson.Marshal: %v", err)
+	}
+	if !jsonEqual(t, ours, want) {
+		t.Fatalf("negative zero mismatch:\n ours: %s\n want: %s", ours, want)
 	}
 }
 

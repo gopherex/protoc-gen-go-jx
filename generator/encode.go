@@ -59,7 +59,7 @@ func encodeSingular(g *protogen.GeneratedFile, f *protogen.Field) {
 	ptr := isPointerField(f)
 
 	switch classify(f.Desc) {
-	case kindInt32, kindUint32, kindFloat32, kindFloat64, kindBool:
+	case kindInt32, kindUint32, kindBool:
 		if ptr {
 			g.P("if ", get, " != nil {")
 			g.P("e.FieldStart(", strconvQuote(name), ")")
@@ -67,6 +67,21 @@ func encodeSingular(g *protogen.GeneratedFile, f *protogen.Field) {
 			g.P("}")
 		} else {
 			g.P("if ", get, " != ", zeroLit(f), " {")
+			g.P("e.FieldStart(", strconvQuote(name), ")")
+			emitEncScalarCall(g, f, get)
+			g.P("}")
+		}
+	case kindFloat32, kindFloat64:
+		if ptr {
+			g.P("if ", get, " != nil {")
+			g.P("e.FieldStart(", strconvQuote(name), ")")
+			emitEncScalarCall(g, f, "*"+get)
+			g.P("}")
+		} else {
+			// Emit non-zero values, and also -0.0 (protojson keeps it): its
+			// bit pattern differs from default 0 but == 0 compares true.
+			signbit := g.QualifiedGoIdent(protogen.GoIdent{GoName: "Signbit", GoImportPath: "math"})
+			g.P("if ", get, " != 0 || ", signbit, "(float64(", get, ")) {")
 			g.P("e.FieldStart(", strconvQuote(name), ")")
 			emitEncScalarCall(g, f, get)
 			g.P("}")

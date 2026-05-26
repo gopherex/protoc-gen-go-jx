@@ -13,6 +13,7 @@ import (
 	structpb "google.golang.org/protobuf/types/known/structpb"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	wrapperspb "google.golang.org/protobuf/types/known/wrapperspb"
+	math "math"
 	strconv "strconv"
 )
 
@@ -23,11 +24,11 @@ func (m *ScalarTypes) Encode(e *jx.Encoder) {
 		return
 	}
 	e.ObjStart()
-	if m.FieldDouble != 0 {
+	if m.FieldDouble != 0 || math.Signbit(float64(m.FieldDouble)) {
 		e.FieldStart("fieldDouble")
 		jxpb.EncFloat64(e, m.FieldDouble)
 	}
-	if m.FieldFloat != 0 {
+	if m.FieldFloat != 0 || math.Signbit(float64(m.FieldFloat)) {
 		e.FieldStart("fieldFloat")
 		jxpb.EncFloat32(e, m.FieldFloat)
 	}
