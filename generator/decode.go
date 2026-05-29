@@ -55,11 +55,8 @@ func decodeSingularCase(g *protogen.GeneratedFile, f *protogen.Field) {
 		emitFieldCaseHead(g, f)
 		g.P("if d.Next() == ", g.QualifiedGoIdent(jxPkg.Ident("Null")), " { return d.Null() }")
 		g.P("m.", f.GoName, " = &", f.Message.GoIdent, "{}")
-		if w := wktName(f); w != "" {
-			g.P("return ", g.QualifiedGoIdent(jxpbPkg.Ident("Dec"+w)), "(d, m.", f.GoName, ")")
-		} else {
-			g.P("return m.", f.GoName, ".Decode(d)")
-		}
+		emitDecMsgValue(g, f, "m."+f.GoName)
+		g.P("return nil")
 		return
 	}
 	emitFieldCaseHead(g, f)
@@ -223,7 +220,7 @@ func decodeOneofCase(g *protogen.GeneratedFile, oo *protogen.Oneof, f *protogen.
 	case kindMessage:
 		g.P("w := &", f.GoIdent, "{}")
 		g.P("w.", f.GoName, " = &", f.Message.GoIdent, "{}")
-		g.P("if err := w.", f.GoName, ".Decode(d); err != nil { return err }")
+		emitDecMsgValue(g, f, "w."+f.GoName)
 		g.P("m.", oo.GoName, " = w")
 		g.P("return nil")
 	case kindEnum:

@@ -1049,7 +1049,10 @@ func (m *Outer) Decode(d *jx.Decoder) error {
 				return d.Null()
 			}
 			m.Inner = &Outer_Inner{}
-			return m.Inner.Decode(d)
+			if err := m.Inner.Decode(d); err != nil {
+				return err
+			}
+			return nil
 		case "enumField", "enum_field":
 			if seen["EnumField"] {
 				return fmt.Errorf("duplicate field %q", key)
@@ -1088,7 +1091,10 @@ func (m *Outer) Decode(d *jx.Decoder) error {
 				return d.Null()
 			}
 			m.DeepInner = &Outer_Inner_DeepInner{}
-			return m.DeepInner.Decode(d)
+			if err := m.DeepInner.Decode(d); err != nil {
+				return err
+			}
+			return nil
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
@@ -1170,7 +1176,10 @@ func (m *Outer_Inner) Decode(d *jx.Decoder) error {
 				return d.Null()
 			}
 			m.Deep = &Outer_Inner_DeepInner{}
-			return m.Deep.Decode(d)
+			if err := m.Deep.Decode(d); err != nil {
+				return err
+			}
+			return nil
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
@@ -1407,7 +1416,10 @@ func (m *EnumAndMessageFields) Decode(d *jx.Decoder) error {
 				return d.Null()
 			}
 			m.SingularMessage = &ScalarTypes{}
-			return m.SingularMessage.Decode(d)
+			if err := m.SingularMessage.Decode(d); err != nil {
+				return err
+			}
+			return nil
 		case "optionalMessage", "optional_message":
 			if seen["OptionalMessage"] {
 				return fmt.Errorf("duplicate field %q", key)
@@ -1417,7 +1429,10 @@ func (m *EnumAndMessageFields) Decode(d *jx.Decoder) error {
 				return d.Null()
 			}
 			m.OptionalMessage = &ScalarTypes{}
-			return m.OptionalMessage.Decode(d)
+			if err := m.OptionalMessage.Decode(d); err != nil {
+				return err
+			}
+			return nil
 		case "repeatedMessage", "repeated_message":
 			if seen["RepeatedMessage"] {
 				return fmt.Errorf("duplicate field %q", key)
@@ -1472,7 +1487,10 @@ func (m *EnumAndMessageFields) Decode(d *jx.Decoder) error {
 				return d.Null()
 			}
 			m.NestedMessage = &Outer_Inner{}
-			return m.NestedMessage.Decode(d)
+			if err := m.NestedMessage.Decode(d); err != nil {
+				return err
+			}
+			return nil
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
@@ -2653,7 +2671,10 @@ func (m *WellKnownTypes) Decode(d *jx.Decoder) error {
 				return d.Null()
 			}
 			m.Timestamp = &timestamppb.Timestamp{}
-			return jxpb.DecTimestamp(d, m.Timestamp)
+			if err := jxpb.DecTimestamp(d, m.Timestamp); err != nil {
+				return err
+			}
+			return nil
 		case "duration":
 			if seen["Duration"] {
 				return fmt.Errorf("duplicate field %q", key)
@@ -2663,7 +2684,10 @@ func (m *WellKnownTypes) Decode(d *jx.Decoder) error {
 				return d.Null()
 			}
 			m.Duration = &durationpb.Duration{}
-			return jxpb.DecDuration(d, m.Duration)
+			if err := jxpb.DecDuration(d, m.Duration); err != nil {
+				return err
+			}
+			return nil
 		case "any":
 			if seen["Any"] {
 				return fmt.Errorf("duplicate field %q", key)
@@ -2673,7 +2697,10 @@ func (m *WellKnownTypes) Decode(d *jx.Decoder) error {
 				return d.Null()
 			}
 			m.Any = &anypb.Any{}
-			return jxpb.DecAny(d, m.Any)
+			if err := jxpb.DecAny(d, m.Any); err != nil {
+				return err
+			}
+			return nil
 		case "empty":
 			if seen["Empty"] {
 				return fmt.Errorf("duplicate field %q", key)
@@ -2683,7 +2710,10 @@ func (m *WellKnownTypes) Decode(d *jx.Decoder) error {
 				return d.Null()
 			}
 			m.Empty = &emptypb.Empty{}
-			return jxpb.DecEmpty(d, m.Empty)
+			if err := jxpb.DecEmpty(d, m.Empty); err != nil {
+				return err
+			}
+			return nil
 		case "fieldMask", "field_mask":
 			if seen["FieldMask"] {
 				return fmt.Errorf("duplicate field %q", key)
@@ -2693,7 +2723,10 @@ func (m *WellKnownTypes) Decode(d *jx.Decoder) error {
 				return d.Null()
 			}
 			m.FieldMask = &fieldmaskpb.FieldMask{}
-			return jxpb.DecFieldMask(d, m.FieldMask)
+			if err := jxpb.DecFieldMask(d, m.FieldMask); err != nil {
+				return err
+			}
+			return nil
 		case "struct":
 			if seen["Struct"] {
 				return fmt.Errorf("duplicate field %q", key)
@@ -2703,7 +2736,10 @@ func (m *WellKnownTypes) Decode(d *jx.Decoder) error {
 				return d.Null()
 			}
 			m.Struct = &structpb.Struct{}
-			return jxpb.DecStruct(d, m.Struct)
+			if err := jxpb.DecStruct(d, m.Struct); err != nil {
+				return err
+			}
+			return nil
 		case "value":
 			if seen["Value"] {
 				return fmt.Errorf("duplicate field %q", key)
@@ -2713,7 +2749,10 @@ func (m *WellKnownTypes) Decode(d *jx.Decoder) error {
 				return d.Null()
 			}
 			m.Value = &structpb.Value{}
-			return jxpb.DecValue(d, m.Value)
+			if err := jxpb.DecValue(d, m.Value); err != nil {
+				return err
+			}
+			return nil
 		case "listValue", "list_value":
 			if seen["ListValue"] {
 				return fmt.Errorf("duplicate field %q", key)
@@ -2723,7 +2762,10 @@ func (m *WellKnownTypes) Decode(d *jx.Decoder) error {
 				return d.Null()
 			}
 			m.ListValue = &structpb.ListValue{}
-			return jxpb.DecListValue(d, m.ListValue)
+			if err := jxpb.DecListValue(d, m.ListValue); err != nil {
+				return err
+			}
+			return nil
 		case "doubleWrapper", "double_wrapper":
 			if seen["DoubleWrapper"] {
 				return fmt.Errorf("duplicate field %q", key)
@@ -2733,7 +2775,10 @@ func (m *WellKnownTypes) Decode(d *jx.Decoder) error {
 				return d.Null()
 			}
 			m.DoubleWrapper = &wrapperspb.DoubleValue{}
-			return jxpb.DecDoubleValue(d, m.DoubleWrapper)
+			if err := jxpb.DecDoubleValue(d, m.DoubleWrapper); err != nil {
+				return err
+			}
+			return nil
 		case "floatWrapper", "float_wrapper":
 			if seen["FloatWrapper"] {
 				return fmt.Errorf("duplicate field %q", key)
@@ -2743,7 +2788,10 @@ func (m *WellKnownTypes) Decode(d *jx.Decoder) error {
 				return d.Null()
 			}
 			m.FloatWrapper = &wrapperspb.FloatValue{}
-			return jxpb.DecFloatValue(d, m.FloatWrapper)
+			if err := jxpb.DecFloatValue(d, m.FloatWrapper); err != nil {
+				return err
+			}
+			return nil
 		case "int32Wrapper", "int32_wrapper":
 			if seen["Int32Wrapper"] {
 				return fmt.Errorf("duplicate field %q", key)
@@ -2753,7 +2801,10 @@ func (m *WellKnownTypes) Decode(d *jx.Decoder) error {
 				return d.Null()
 			}
 			m.Int32Wrapper = &wrapperspb.Int32Value{}
-			return jxpb.DecInt32Value(d, m.Int32Wrapper)
+			if err := jxpb.DecInt32Value(d, m.Int32Wrapper); err != nil {
+				return err
+			}
+			return nil
 		case "int64Wrapper", "int64_wrapper":
 			if seen["Int64Wrapper"] {
 				return fmt.Errorf("duplicate field %q", key)
@@ -2763,7 +2814,10 @@ func (m *WellKnownTypes) Decode(d *jx.Decoder) error {
 				return d.Null()
 			}
 			m.Int64Wrapper = &wrapperspb.Int64Value{}
-			return jxpb.DecInt64Value(d, m.Int64Wrapper)
+			if err := jxpb.DecInt64Value(d, m.Int64Wrapper); err != nil {
+				return err
+			}
+			return nil
 		case "uint32Wrapper", "uint32_wrapper":
 			if seen["Uint32Wrapper"] {
 				return fmt.Errorf("duplicate field %q", key)
@@ -2773,7 +2827,10 @@ func (m *WellKnownTypes) Decode(d *jx.Decoder) error {
 				return d.Null()
 			}
 			m.Uint32Wrapper = &wrapperspb.UInt32Value{}
-			return jxpb.DecUint32Value(d, m.Uint32Wrapper)
+			if err := jxpb.DecUint32Value(d, m.Uint32Wrapper); err != nil {
+				return err
+			}
+			return nil
 		case "uint64Wrapper", "uint64_wrapper":
 			if seen["Uint64Wrapper"] {
 				return fmt.Errorf("duplicate field %q", key)
@@ -2783,7 +2840,10 @@ func (m *WellKnownTypes) Decode(d *jx.Decoder) error {
 				return d.Null()
 			}
 			m.Uint64Wrapper = &wrapperspb.UInt64Value{}
-			return jxpb.DecUint64Value(d, m.Uint64Wrapper)
+			if err := jxpb.DecUint64Value(d, m.Uint64Wrapper); err != nil {
+				return err
+			}
+			return nil
 		case "boolWrapper", "bool_wrapper":
 			if seen["BoolWrapper"] {
 				return fmt.Errorf("duplicate field %q", key)
@@ -2793,7 +2853,10 @@ func (m *WellKnownTypes) Decode(d *jx.Decoder) error {
 				return d.Null()
 			}
 			m.BoolWrapper = &wrapperspb.BoolValue{}
-			return jxpb.DecBoolValue(d, m.BoolWrapper)
+			if err := jxpb.DecBoolValue(d, m.BoolWrapper); err != nil {
+				return err
+			}
+			return nil
 		case "stringWrapper", "string_wrapper":
 			if seen["StringWrapper"] {
 				return fmt.Errorf("duplicate field %q", key)
@@ -2803,7 +2866,10 @@ func (m *WellKnownTypes) Decode(d *jx.Decoder) error {
 				return d.Null()
 			}
 			m.StringWrapper = &wrapperspb.StringValue{}
-			return jxpb.DecStringValue(d, m.StringWrapper)
+			if err := jxpb.DecStringValue(d, m.StringWrapper); err != nil {
+				return err
+			}
+			return nil
 		case "bytesWrapper", "bytes_wrapper":
 			if seen["BytesWrapper"] {
 				return fmt.Errorf("duplicate field %q", key)
@@ -2813,7 +2879,10 @@ func (m *WellKnownTypes) Decode(d *jx.Decoder) error {
 				return d.Null()
 			}
 			m.BytesWrapper = &wrapperspb.BytesValue{}
-			return jxpb.DecBytesValue(d, m.BytesWrapper)
+			if err := jxpb.DecBytesValue(d, m.BytesWrapper); err != nil {
+				return err
+			}
+			return nil
 		case "repeatedTimestamp", "repeated_timestamp":
 			if seen["RepeatedTimestamp"] {
 				return fmt.Errorf("duplicate field %q", key)
@@ -2930,7 +2999,10 @@ func (m *TreeNode) Decode(d *jx.Decoder) error {
 				return d.Null()
 			}
 			m.Parent = &TreeNode{}
-			return m.Parent.Decode(d)
+			if err := m.Parent.Decode(d); err != nil {
+				return err
+			}
+			return nil
 		case "children":
 			if seen["Children"] {
 				return fmt.Errorf("duplicate field %q", key)
@@ -3012,7 +3084,10 @@ func (m *MutualA) Decode(d *jx.Decoder) error {
 				return d.Null()
 			}
 			m.B = &MutualB{}
-			return m.B.Decode(d)
+			if err := m.B.Decode(d); err != nil {
+				return err
+			}
+			return nil
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
@@ -3057,7 +3132,10 @@ func (m *MutualB) Decode(d *jx.Decoder) error {
 				return d.Null()
 			}
 			m.A = &MutualA{}
-			return m.A.Decode(d)
+			if err := m.A.Decode(d); err != nil {
+				return err
+			}
+			return nil
 		default:
 			return fmt.Errorf("unknown field %q", key)
 		}
@@ -3203,7 +3281,10 @@ func (m *Everything) Decode(d *jx.Decoder) error {
 				return d.Null()
 			}
 			m.Scalars = &ScalarTypes{}
-			return m.Scalars.Decode(d)
+			if err := m.Scalars.Decode(d); err != nil {
+				return err
+			}
+			return nil
 		case "optionals":
 			if seen["Optionals"] {
 				return fmt.Errorf("duplicate field %q", key)
@@ -3213,7 +3294,10 @@ func (m *Everything) Decode(d *jx.Decoder) error {
 				return d.Null()
 			}
 			m.Optionals = &OptionalScalarTypes{}
-			return m.Optionals.Decode(d)
+			if err := m.Optionals.Decode(d); err != nil {
+				return err
+			}
+			return nil
 		case "repeateds":
 			if seen["Repeateds"] {
 				return fmt.Errorf("duplicate field %q", key)
@@ -3223,7 +3307,10 @@ func (m *Everything) Decode(d *jx.Decoder) error {
 				return d.Null()
 			}
 			m.Repeateds = &RepeatedScalarTypes{}
-			return m.Repeateds.Decode(d)
+			if err := m.Repeateds.Decode(d); err != nil {
+				return err
+			}
+			return nil
 		case "enumsAndMessages", "enums_and_messages":
 			if seen["EnumsAndMessages"] {
 				return fmt.Errorf("duplicate field %q", key)
@@ -3233,7 +3320,10 @@ func (m *Everything) Decode(d *jx.Decoder) error {
 				return d.Null()
 			}
 			m.EnumsAndMessages = &EnumAndMessageFields{}
-			return m.EnumsAndMessages.Decode(d)
+			if err := m.EnumsAndMessages.Decode(d); err != nil {
+				return err
+			}
+			return nil
 		case "mapKeys", "map_keys":
 			if seen["MapKeys"] {
 				return fmt.Errorf("duplicate field %q", key)
@@ -3243,7 +3333,10 @@ func (m *Everything) Decode(d *jx.Decoder) error {
 				return d.Null()
 			}
 			m.MapKeys = &MapKeyTypes{}
-			return m.MapKeys.Decode(d)
+			if err := m.MapKeys.Decode(d); err != nil {
+				return err
+			}
+			return nil
 		case "mapValues", "map_values":
 			if seen["MapValues"] {
 				return fmt.Errorf("duplicate field %q", key)
@@ -3253,7 +3346,10 @@ func (m *Everything) Decode(d *jx.Decoder) error {
 				return d.Null()
 			}
 			m.MapValues = &MapValueTypes{}
-			return m.MapValues.Decode(d)
+			if err := m.MapValues.Decode(d); err != nil {
+				return err
+			}
+			return nil
 		case "oneof":
 			if seen["Oneof"] {
 				return fmt.Errorf("duplicate field %q", key)
@@ -3263,7 +3359,10 @@ func (m *Everything) Decode(d *jx.Decoder) error {
 				return d.Null()
 			}
 			m.Oneof = &OneofContainer{}
-			return m.Oneof.Decode(d)
+			if err := m.Oneof.Decode(d); err != nil {
+				return err
+			}
+			return nil
 		case "wellKnown", "well_known":
 			if seen["WellKnown"] {
 				return fmt.Errorf("duplicate field %q", key)
@@ -3273,7 +3372,10 @@ func (m *Everything) Decode(d *jx.Decoder) error {
 				return d.Null()
 			}
 			m.WellKnown = &WellKnownTypes{}
-			return m.WellKnown.Decode(d)
+			if err := m.WellKnown.Decode(d); err != nil {
+				return err
+			}
+			return nil
 		case "tree":
 			if seen["Tree"] {
 				return fmt.Errorf("duplicate field %q", key)
@@ -3283,7 +3385,10 @@ func (m *Everything) Decode(d *jx.Decoder) error {
 				return d.Null()
 			}
 			m.Tree = &TreeNode{}
-			return m.Tree.Decode(d)
+			if err := m.Tree.Decode(d); err != nil {
+				return err
+			}
+			return nil
 		case "reserved":
 			if seen["Reserved"] {
 				return fmt.Errorf("duplicate field %q", key)
@@ -3293,7 +3398,10 @@ func (m *Everything) Decode(d *jx.Decoder) error {
 				return d.Null()
 			}
 			m.Reserved = &Reserved{}
-			return m.Reserved.Decode(d)
+			if err := m.Reserved.Decode(d); err != nil {
+				return err
+			}
+			return nil
 		case "recursive":
 			if seen["Recursive"] {
 				return fmt.Errorf("duplicate field %q", key)

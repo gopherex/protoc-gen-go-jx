@@ -33,20 +33,39 @@ func wktName(f *protogen.Field) string {
 	return wktCodec[string(f.Message.Desc.FullName())]
 }
 
+// hasGeneratedJx reports whether the field's message type is in the same Go
+// package as the message owning the field. Same-package types are generated in
+// this run and thus have jx Encode/Decode methods, so we can call them directly.
+// Cross-package types may live in a proto without generated jx code (outside our
+// jurisdiction); those route through jxpb.{Enc,Dec}Message, which detects the
+// generated codec at runtime and falls back to protojson when it is absent.
+func hasGeneratedJx(f *protogen.Field) bool {
+	if f.Parent == nil || f.Message == nil {
+		return false
+	}
+	return f.Parent.GoIdent.GoImportPath == f.Message.GoIdent.GoImportPath
+}
+
 // emitEncMsgValue emits the encode call for a message value expression `expr`.
 func emitEncMsgValue(g *protogen.GeneratedFile, f *protogen.Field, expr string) {
-	if w := wktName(f); w != "" {
-		g.P(g.QualifiedGoIdent(jxpbPkg.Ident("Enc"+w)), "(e, ", expr, ")")
-	} else {
+	switch {
+	case wktName(f) != "":
+		g.P(g.QualifiedGoIdent(jxpbPkg.Ident("Enc"+wktName(f))), "(e, ", expr, ")")
+	case hasGeneratedJx(f):
 		g.P(expr, ".Encode(e)")
+	default:
+		g.P(g.QualifiedGoIdent(jxpbPkg.Ident("EncMessage")), "(e, ", expr, ")")
 	}
 }
 
 // emitDecMsgValue emits decode of an already-allocated message pointer `target`.
 func emitDecMsgValue(g *protogen.GeneratedFile, f *protogen.Field, target string) {
-	if w := wktName(f); w != "" {
-		g.P("if err := ", g.QualifiedGoIdent(jxpbPkg.Ident("Dec"+w)), "(d, ", target, "); err != nil { return err }")
-	} else {
+	switch {
+	case wktName(f) != "":
+		g.P("if err := ", g.QualifiedGoIdent(jxpbPkg.Ident("Dec"+wktName(f))), "(d, ", target, "); err != nil { return err }")
+	case hasGeneratedJx(f):
 		g.P("if err := ", target, ".Decode(d); err != nil { return err }")
+	default:
+		g.P("if err := ", g.QualifiedGoIdent(jxpbPkg.Ident("DecMessage")), "(d, ", target, "); err != nil { return err }")
 	}
 }
